@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Domain.Models.Packet>
+
+@{
+    Layout = "_Layout";
+}
+
+<style>
+    /* Custom CSS for the price container */
+    .price-container {
+        border: 1px solid #ccc; /* Add borders as per your requirements */
+        border-radius: 5px; /* Optional: Add rounded corners */
+        padding: 5px;
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+    }
+
+    img {
+        width: 300px;
+        height: 300px;
+        object-fit: cover;
+    }
+</style>
+
+<div class="d-flex flex-wrap" style="padding: 20px">
+    @foreach (var item in Model) {
+        <div class="card border-primary mb-3 mr-3" style="max-width: 21rem; position: relative; border: 1px solid #48a37c">
+            <div class="card-header">@item.Name</div>
+            <div class="card-body">
+                <img src="@item.ImageUrl" alt="Packet Image" class="img" />
+            </div>
+            <div class="card-footer" style="position: relative;">
+                <p class="card-text">@item.Type</p>
+                <a href="@Url.Action("PacketDetails", "Student", new { id = item.Id })">View Details</a>
+
+                <!-- Add the price container with borders -->
+                <div class="price-container">
+                    €@item.Price
+                </div>
+            </div>
+        </div>
+    }
+</div>

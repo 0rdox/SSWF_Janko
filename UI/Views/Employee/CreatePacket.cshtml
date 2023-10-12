@@ -1,0 +1,231 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Create Packet</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        .container {
+            border: solid 3px;
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 60px;
+        }
+
+        /* Style product items to be displayed inline */
+        .product-item {
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+            /* Limit the size of images within product items to 100px by 100px */
+            .product-item img {
+                width: 100px;
+                height: 100px;
+                object-fit: contain;
+            }
+
+
+        .ProductLabel {
+            margin-right: 20px;
+        }
+
+        .form-check-input {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Create Packet</h1>
+        <form id="myform" method="post" action="/Employee/CreatePacket">
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-9">
+                        <label for="Name">Naam:</label>
+                        <input type="text" class="form-control" id="Name" name="name">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="Price">Prijs:</label>
+                        <input type="number" class="form-control" id="Price" name="price">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="Type">Type pakket:</label>
+                <select class="form-control" id="Type" name="Type">
+                    <option value="TypeEnum.Broodpakket">Broodpakket</option>
+                    <option value="TypeEnum.Drankpakket">Drankpakket</option>
+                    <option value="TypeEnum.WarmeMaaltijd">Warme Maaltijd</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="DateTime">Ophaaltijd:</label>
+                <input type="datetime-local" class="form-control" id="DateTime" name="pickupTime">
+            </div>
+
+            <div class="form-group">
+                <label for="ImageUrl">Afbeelding URL:</label>
+                <input type="url" class="form-control" id="ImageUrl" name="imageUrl">
+            </div>
+
+            <button type="button" class="btn btn-success" id="addProduct">Add Product</button>
+
+            <!-- List of products -->
+            <div class="form-group" id="productslist">
+                <!-- Product information will be displayed here -->
+            </div>
+
+
+            <!--hidden input element for products-->
+            <input type="hidden" name="products" id="products">
+
+
+            <button type="submit" class="btn btn-primary">Sla Op</button>
+        </form>
+    </div>
+
+    <!-- Product Form Modal -->
+    <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productModalLabel">Add Product</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="ProductName">Product Name:</label>
+                        <input type="text" class="form-control" id="ProductName" name="ProductName">
+                    </div>
+                    <div class="form-group">
+                        <label for="ProductAlcohol" class="form-check-label">Alcohol:</label>
+                        <input type="checkbox" class="form-check-input" id="ProductAlcohol" name="ProductAlcohol">
+                    </div>
+                    <div class="form-group">
+                        <label for="ProductImageUrl">Product Image URL:</label>
+                        <input type="url" class="form-control" id="ProductImageUrl" name="ProductImageUrl">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="closeProduct">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveProduct">Save Product</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script>
+
+        var productsData = [];
+
+
+        //CLICK ADDPRODUCT TO SHOW ProductModal
+        $("#addProduct").click(function () {
+            $("#productModal").modal("show");
+        });
+
+
+
+
+
+        $("#closeProduct").click(function () {
+            $("#ProductName").val("");
+            $("#ProductAlcohol").prop("checked", false);
+            $("#ProductImageUrl").val("");
+
+            $("#productModal").modal("hide");
+        });
+
+
+
+        $("#saveProduct").click(function () {
+            // Get product information from the modal form fields
+            var productName = $("#ProductName").val();
+            var productAlcohol = $("#ProductAlcohol").prop("checked");
+            var productImageUrl = $("#ProductImageUrl").val();
+
+            // Create an object to represent the product
+            var product = {
+                Name: productName,
+                Alcohol: productAlcohol,
+                ImageUrl: productImageUrl
+            };
+
+            productsData.push(product);
+
+
+
+
+            $("#ProductName").val("");
+            $("#ProductAlcohol").prop("checked", false);
+            $("#ProductImageUrl").val("");
+
+            // Close the modal
+            $("#productModal").modal("hide");
+        });
+
+
+        function updateProductList() {
+            console.log("test", "update product testing log");
+            var productListElement = $("#productslist");
+
+
+            let hidden_input = document.querySelector("[name = 'products']")
+            hidden_input.value = JSON.stringify(productsData)
+
+            console.log("hidden", hidden_input.value);
+            console.log("proddata", productsData);
+            // Clear the existing content in the product list
+            productListElement.html('');
+
+            // Loop through the productsData array and create HTML elements for each product
+            for (var i = 0; i < productsData.length; i++) {
+                var product = productsData[i];
+
+                var productItem = $("<div class='product-item'></div>");
+                var productName = $("<div class='ProductLabel'>Product Name: " + product.Name + "</div>");
+                var productAlcohol = $("<div class='ProductLabel'>Alcohol: " + (product.Alcohol ? "Yes" : "No") + "</div>");
+                var productImage = $("<img src='" + product.ImageUrl + "' alt='Product Image'>");
+
+                productItem.append(productName, productAlcohol, productImage);
+                productListElement.append(productItem);
+            }
+        }
+
+        $("#saveProduct").click(function () {
+            updateProductList();
+        });
+
+
+                        // let hidden_input = document.querySelector("[name = 'hiddenProducts']")
+                        // //  hidden_input.value = JSON.stringify(productsData)
+
+                        // document.querySelector("form").addEventListener("submit", function (e) {
+                        //     e.preventDefault();
+
+                        //     console.log(hidden_input);
+
+                        //     hidden_input.value = JSON.stringify(productsData);
+
+                        //     console.log(hidden_input);
+                        // });
+
+
+
+    </script>
+</body>
+</html>

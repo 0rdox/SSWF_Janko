@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<h1>Students:</h1>
+<a href="/student/packets">View Student Packets</a>
+<a href="/student/reservations">View Student Reservations</a>
+
+<h1>Employees:</h1>
+<a href="/employee/packets">View Employee Packets</a>
+<a href="/employee/create">Create Packet</a>
+
+
+<form method="post" asp-controller="Account" asp-action="Logout">
+    <button type="submit">Logout</button>
+</form>

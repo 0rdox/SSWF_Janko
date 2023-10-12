@@ -1,0 +1,102 @@
+﻿@model (Domain.Models.Packet, IEnumerable<Domain.Models.Product>)
+@{
+	Layout = "_Layout";
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Packet Details</title>
+	<style>
+		.packet-container {
+			display: flex;
+			align-items: center;
+			margin: 20px;
+		}
+
+		.packet-image {
+			width: 150px;
+			height: 150px;
+			border: 1px solid #ccc;
+			margin-right: 20px;
+		}
+
+		.packet-info-container {
+			border: 1px solid #ccc;
+			padding: 10px;
+			border-radius: 5px;
+		}
+
+		.packet-name {
+			font-size: 20px;
+			font-weight: bold;
+		}
+
+		.other-info {
+			margin-top: 10px;
+			font-size: 14px;
+		}
+
+		.reserve-button {
+			margin-top: 20px;
+			background-color: #007bff;
+			color: #fff;
+			padding: 10px 20px;
+			border: none;
+			cursor: pointer;
+		}
+	</style>
+</head>
+<body>
+	<div class="packet-container">
+		<div class="packet-info-container">
+			<div class="packet-info">
+				<div class="packet-name">
+					@Model.Item1.Name
+				</div>
+				<div class="other-info">
+					<!-- Other packet information goes here -->
+					<p>18+?: @Model.Item1.OverEighteen</p>
+					<p>Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+					<p>Price: @Model.Item1.Price</p>
+					<p>Type: @Model.Item1.Type</p>
+				</div>
+
+
+
+
+
+			</div>
+
+
+			<form method="post" asp-action="Reserve" asp-controller="Student">
+				<input type="hidden" name="packetId" value="@Model.Item1.Id" />
+				<button class="reserve-button" type="submit">Reserveer</button>
+			</form>
+			<p style="margin-top:10px">Mogelijke producten:</p>
+			<div class="product_images d-flex flex-wrap">
+				@foreach (var item in Model.Item2) {
+					<div class="card border-primary mb-3 mr-3" style="max-width: 10rem;">
+						<div class="card-header">@item.Name</div>
+						<div class="card-body">
+							<img src="@item.ImageUrl" alt="Packet Image" class="img-fluid" />
+						</div>
+						<div class="card-footer">
+							<p class="card-text"></p>
+						</div>
+					</div>
+				}
+			</div>
+
+		</div>
+		<div class="packet-image">
+			<!-- Your packet image goes here -->
+			<img src="@Model.Item1.ImageUrl" alt="Packet Image" class="img-fluid">
+		</div>
+	</div>
+	</div>
+</body>
+</html>

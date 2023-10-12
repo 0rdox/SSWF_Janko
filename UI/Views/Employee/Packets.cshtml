@@ -1,0 +1,55 @@
+﻿@model (IOrderedEnumerable<Domain.Models.Packet>, IOrderedEnumerable<Domain.Models.Packet>)
+
+@{
+    Layout = "_Layout";
+}
+<head>
+    <style>
+        img {
+            width: 300px;
+            height: 300px;
+            object-fit: contain;
+        }
+
+        body {
+            margin-bottom:60px;
+        }
+    </style>
+</head>
+<h2>Jouw kantine</h2>
+<div class="d-flex flex-wrap" style="padding:20px">
+    @foreach (var item in Model.Item1) {
+        <div class="card border-primary mb-3 mr-3" style="max-width: 21rem;">
+            <div class="card-header">@item.Name</div>
+            <div class="card-body">
+                <img src="@item.ImageUrl" alt="Packet Image" class="img" />
+                <p class="card-text">@item.Price</p>
+            </div>
+            <div class="card-footer">
+                <p class="card-text">@item.Type</p>
+                <p class="card-text">@item.DateTime</p>
+                <a href="@Url.Action("PacketDetails", "Employee", new { id = item.Id })">View Details</a>
+
+            </div>
+        </div>
+    }
+</div>
+
+<h2>Andere kantine's</h2>
+<div class="d-flex flex-wrap" style="padding:20px">
+    @foreach (var item in Model.Item2) {
+        <div class="card border-primary mb-3 mr-3" style="max-width: 21rem;">
+            <div class="card-header">@item.Name</div>
+            <div class="card-body">
+                <img src="@item.ImageUrl" alt="Packet Image" class="img+" />
+                <p class="card-text">@item.Price</p>
+            </div>
+            <div class="card-footer">
+                <p class="card-text">@item.Type</p>
+                <p class="card-text">@item.DateTime</p>
+                <a href="@Url.Action("PacketDetails", "Employee", new { id = item.Id })">View Details</a>
+
+            </div>
+        </div>
+    }
+</div>
