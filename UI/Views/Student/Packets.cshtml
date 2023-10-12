@@ -15,6 +15,10 @@
         right: 10px;
     }
 
+    body {
+        margin-bottom: 60px;
+    }
+
     img {
         width: 300px;
         height: 300px;
@@ -24,7 +28,7 @@
 
 <div class="d-flex flex-wrap" style="padding: 20px">
     @foreach (var item in Model) {
-        <div class="card border-primary mb-3 mr-3" style="max-width: 21rem; position: relative; border: 1px solid #48a37c">
+        <div class="card border-primary mb-3 mr-3" style="max-width: 21rem; position: relative; ">
             <div class="card-header">@item.Name</div>
             <div class="card-body">
                 <img src="@item.ImageUrl" alt="Packet Image" class="img" />
