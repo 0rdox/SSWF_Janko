@@ -60,6 +60,8 @@ namespace UI.Controllers {
             //"[{\"Name\":\"Bread\",\"Alcohol\":false,\"ImageUrl\":\"bread.img\"},{\"Name\":\"bread2\",\"Alcohol\":true,\"ImageUrl\":\"breadimg2\"}]"
             Packet packet = new Packet(name, pickupTime, productObjects, price, type, imageUrl);
 
+            DateTime testMaxDateTime = packet.MaxDateTime;
+            bool testOverEighteen = packet.OverEighteen;
             //_packetRepository.CreatePacket(packet);
 
             //check max date time
