@@ -123,11 +123,11 @@ using (var roleScope = app.Services.CreateScope()) {
 //var dataSeeder2 = scope.ServiceProvider.GetRequiredService<SeedData>();
 //await dataSeeder2.AddAdditionalPackets();
 
-//app.Run();
+app.Run();
 
 
 
-  
+
 
 
 
