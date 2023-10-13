@@ -119,9 +119,9 @@ using (var roleScope = app.Services.CreateScope()) {
 	dataSeeder?.SeedDatabase();
 }
 
-//using var scope3 = app.Services.CreateScope();
-//var dataSeeder2 = scope.ServiceProvider.GetRequiredService<SeedData>();
-//await dataSeeder2.AddAdditionalPackets();
+using var scope3 = app.Services.CreateScope();
+var dataSeeder2 = scope.ServiceProvider.GetRequiredService<SeedData>();
+await dataSeeder2.AddAdditionalPackets();
 
 app.Run();
 
