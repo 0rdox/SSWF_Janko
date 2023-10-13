@@ -52,6 +52,19 @@
             padding-left: 10px;
             color: white;
         }
+
+
+        i:hover {
+            text-decoration: none;
+            color: inherit;
+            color: white;
+            text-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+            transition: box-shadow 0.2s; /* Add a smooth transition effect */
+        }
+
+        i {
+            color: white;
+        }
     </style>
 
 </head>
@@ -69,7 +82,13 @@
 
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-right">
                     <ul class="navbar-nav flex-grow-1 justify-content-end">
-                      
+                        <div class="header-icons d-flex">
+                            <i class="fas fa-user mx-2"></i>
+                            <a href="/Student/Reservations" class="header-icon-link">
+                                <i class="fas fa-calendar mx-2"></i>
+                            </a>
+                            <i class="fas fa-cog mx-2"></i>
+                        </div>
                     </ul>
                 </div>
             </div>

@@ -1,93 +1,108 @@
 ﻿@model (IOrderedEnumerable<Domain.Models.Packet>, IOrderedEnumerable<Domain.Models.Packet>)
 
 @{
-	Layout = "_Layout";
-	System.Globalization.CultureInfo dutch = new System.Globalization.CultureInfo("nl-NL");
+    Layout = "_LayoutEmployee";
+    System.Globalization.CultureInfo dutch = new System.Globalization.CultureInfo("nl-NL");
 }
 <head>
-	<style>
-		img {
-			width: 300px;
-			height: 300px;
-			object-fit: cover;
-		}
+    <style>
+        img {
+            width: 285px;
+            height: 285px;
+            object-fit: cover;
+        }
 
-		body {
-			margin-bottom: 60px;
-		}
+        body {
+            margin-bottom: 60px;
+        }
 
-		.price-container {
-			background-color: white;
-			border: 1px solid #ccc; /* Add borders as per your requirements */
-			border-radius: 5px; /* Optional: Add rounded corners */
-			padding: 5px;
-			position: absolute;
-			bottom: 10px;
-			right: 10px;
-		}
+        .price-container {
+            background-color: white;
+            border: 1px solid #ccc; /* Add borders as per your requirements */
+            border-radius: 10px; /* Optional: Add rounded corners */
+            padding: 5px;
+            position: absolute;
+            right: 8px;
+            bottom: 8px;
+        }
 
-		.custom-card {
-			border: 2px solid #26523f;
-			border-radius: 20px; /* Replace #007BFF with the appropriate color code for your "primary" color */
-			margin-bottom: 1rem; /* Equivalent to Bootstrap's mb-3 */
-			margin-right: 1rem; /* Equivalent to Bootstrap's mr-3 */
-			overflow: hidden; /* Add this line */
-		}
+        .custom-card {
+            border: 2px solid #26523f;
+            border-radius: 10px; /* Replace #007BFF with the appropriate color code for your "primary" color */
+            margin-bottom: 1rem; /* Equivalent to Bootstrap's mb-3 */
+            margin-right: 1rem; /* Equivalent to Bootstrap's mr-3 */
+            overflow: hidden;
+        }
 
-		.card-header {
-			border-top-left-radius: 20px;
-			border-top-right-radius: 20px;
-			text-align: center;
-			font-weight: bold;
-			border-radius:20px;
-			background-color: #62d2a2;
-			
-		}
+        .card-header {
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 20px;
+            background-color: #62d2a2;
+        }
 
-	</style>
+        .custom-card:hover {
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.4); /* Adjust the shadow as needed */
+            transition: box-shadow 0.2s; /* Add a smooth transition effect */
+        }
+
+        a:hover {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        a {
+            color: inherit;
+        }
+    </style>
 </head>
 
 <h2>Jouw kantine</h2>
-<div class="d-flex flex-wrap" style="padding:20px">
-	@foreach (var item in Model.Item1) {
-		<div class="custom-card" style="max-width: 21rem;">
-			<div class="card-header">@item.Name</div>
-			<div class="card-body">
-				<img src="@item.ImageUrl" alt="Packet Image" class="img" />
+<div class="d-flex flex-wrap" style="padding: 20px;">
+    @foreach (var item in Model.Item1) {
+        <a href="@Url.Action("PacketDetails", "Employee", new { id = item.Id })" class="custom-card" style="max-width: 21rem; position: relative;">
+            <div class="card-header">@item.Name</div>
+            <div class="card-body" style="position: relative;">
+                <div class="img-container">
+                    <img src="@item.ImageUrl" alt="Packet Image" class="img" />
+                </div>
 
-			</div>
-			<div class="card-footer" style="background-color:#62d2a2">
-				<p class="card-text">@item.Type</p>
-				<p class="card-text">@item.City - @item.Canteen</p>
-				<p class="card-text">@item.DateTime.ToString("dd MMMM, HH:mm",dutch)</p>
-				<a href="@Url.Action("PacketDetails", "Employee", new { id = item.Id })">View Details</a>
-
-			</div>
-			<div class="price-container">
-				€@item.Price
-			</div>
-		</div>
-	}
+            </div>
+            <div class="card-footer" style="background-color: #62d2a2;">
+                <p class="card-text">@item.Type</p>
+                <p class="card-text">@item.City - @item.Canteen</p>
+                <p class="card-text">@item.DateTime.ToString("dd MMMM, HH:mm", dutch)</p>
+            </div>
+            <div class="price-container">
+                €@item.Price
+            </div>
+        </a>
+    }
 </div>
 
-<h2>Andere kantine's</h2>
-<div class="d-flex flex-wrap" style="padding:20px">
-	@foreach (var item in Model.Item2) {
-		<div class="card border-primary mb-3 mr-3" style="max-width: 21rem;">
-			<div class="card-header">@item.Name</div>
-			<div class="card-body">
-				<img src="@item.ImageUrl" alt="Packet Image" class="img+" />
-				<p class="card-text">@item.Price</p>
-			</div>
-			<div class="card-footer">
-				<p class="card-text">@item.Type</p>
-				<p class="card-text">@item.DateTime</p>
-				<a href="@Url.Action("PacketDetails", "Employee", new { id = item.Id })">View Details</a>
 
-			</div>
-			<div class="price-container">
-				€@item.Price
-			</div>
-		</div>
-	}
+
+<h2>Andere kantine's</h2>
+<div class="d-flex flex-wrap" style="padding: 20px;">
+    @foreach (var item in Model.Item2) {
+        <a href="@Url.Action("PacketDetails", "Employee", new { id = item.Id })" class="custom-card" style="max-width: 21rem; position: relative;">
+            <div class="card-header">@item.Name</div>
+            <div class="card-body" style="position: relative;">
+                <div class="img-container">
+                    <img src="@item.ImageUrl" alt="Packet Image" class="img" />
+                </div>
+
+            </div>
+            <div class="card-footer" style="background-color: #62d2a2;">
+                <p class="card-text">@item.Type</p>
+                <p class="card-text">@item.City - @item.Canteen</p>
+                <p class="card-text">@item.DateTime.ToString("dd MMMM, HH:mm", dutch)</p>
+            </div>
+            <div class="price-container">
+                €@item.Price
+            </div>
+        </a>
+    }
 </div>

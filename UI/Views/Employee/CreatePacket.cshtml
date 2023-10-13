@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = "_Layout";
+    Layout = "_LayoutEmployee";
 }
 
 <!DOCTYPE html>
@@ -38,12 +38,17 @@
         .form-check-input {
             margin-left: 10px;
         }
+
+      
+
     </style>
 </head>
 
 <body>
     <div class="container">
+
         <h1>Create Packet</h1>
+
         <form id="myform" method="post" action="/Employee/CreatePacket">
 
             <div class="form-group">
@@ -89,8 +94,12 @@
             <!--hidden input element for products-->
             <input type="hidden" name="products" id="products">
 
+            <div class="d-flex justify-content-center mt-3">
+                <button type="submit" class="btn btn-primary">Sla Op</button>
+                <button type="button" class="btn btn-danger">Annuleren</button>
 
-            <button type="submit" class="btn btn-primary">Sla Op</button>
+            </div>
+
         </form>
     </div>
 
@@ -211,18 +220,6 @@
         });
 
 
-                        // let hidden_input = document.querySelector("[name = 'hiddenProducts']")
-                        // //  hidden_input.value = JSON.stringify(productsData)
-
-                        // document.querySelector("form").addEventListener("submit", function (e) {
-                        //     e.preventDefault();
-
-                        //     console.log(hidden_input);
-
-                        //     hidden_input.value = JSON.stringify(productsData);
-
-                        //     console.log(hidden_input);
-                        // });
 
 
 

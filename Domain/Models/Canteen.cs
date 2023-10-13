@@ -24,7 +24,6 @@ namespace Domain.Models {
 			Location = location;
 			OffersHotMeals = offersHotMeals;
 
-			int i = 0;
 		}
 	}
 }

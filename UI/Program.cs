@@ -4,7 +4,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Domain.Services;
 using Infrastructure.Repositories;
-using Application.Services;
 using Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -110,8 +109,8 @@ var roleAssigner = scope.ServiceProvider.GetRequiredService<RoleAssigner>();
 await roleAssigner.AssignRolesToStudentsAndEmployees();
 
 //Seed date for PacketContext and SecurityContext
-using (var scope2 = app.Services.CreateScope()) {
-	var service = scope2.ServiceProvider;
+using (var roleScope = app.Services.CreateScope()) {
+	var service = roleScope.ServiceProvider;
 	var dataSeeder = service.GetService<SeedData>();
 	dataSeeder?.SeedDatabase();
 }

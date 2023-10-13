@@ -8,7 +8,7 @@ using System.Data;
 using System.Runtime.Intrinsics.X86;
 using System.Security.Claims;
 
-namespace Application.Services {
+namespace Infrastructure.Data {
     public class RoleAssigner {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;

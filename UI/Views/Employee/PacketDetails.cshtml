@@ -1,6 +1,6 @@
 ﻿@model (Domain.Models.Packet, IEnumerable<Domain.Models.Product>)
 @{
-	Layout = "_Layout";
+	Layout = "_LayoutEmployee";
 }
 
 
@@ -23,6 +23,8 @@
 			border: 1px solid #ccc;
 			margin-right: 20px;
 		}
+
+
 
 		.packet-info-container {
 			border: 1px solid #ccc;
@@ -48,6 +50,10 @@
 			border: none;
 			cursor: pointer;
 		}
+
+
+
+
 	</style>
 </head>
 <body>
@@ -94,6 +100,6 @@
 			<img src="@Model.Item1.ImageUrl" alt="Packet Image" class="img-fluid">
 		</div>
 	</div>
-	</div>
+
 </body>
 </html>
