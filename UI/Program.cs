@@ -33,8 +33,8 @@ builder.Services.AddScoped<SeedData>();
 
 
 //--------------------------DATABASE PARTS--------------------------\\
-var connectionStringApp = builder.Configuration.GetConnectionString("AppString");
-var connectionStringIdentity = builder.Configuration.GetConnectionString("IdentityString");
+var connectionStringApp = builder.Configuration.GetConnectionString("AzureAppDBString");
+var connectionStringIdentity = builder.Configuration.GetConnectionString("AzureIdentityDBString");
 
 //DatabaseApp
 builder.Services.AddDbContext<AppDBContext>(options => {
