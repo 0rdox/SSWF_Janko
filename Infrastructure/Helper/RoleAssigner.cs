@@ -23,44 +23,16 @@ namespace Infrastructure.Data {
         }
 
         public async Task AssignRolesToStudentsAndEmployees() {
-            // Check if the 'Student' and 'Employee' roles exist, and create them if they don't
             await EnsureRoleExists("Student");
+
+
             await EnsureRoleExists("Employee");
-
-            
-
-
-            //// Assign the 'Student' role to students
-            //foreach (var user in _context.Students) {
-            //    IdentityUser[] students = new IdentityUser[9];
-            //    var identityUser = new IdentityUser {
-            //        UserName = user.Name,
-            //        Email = user.Email
-            //    };
-
-            //    var result = await _userManager.CreateAsync(identityUser, password);
-            //    if (result.Succeeded) {
-            //        var res = await _userManager.AddClaimAsync(identityUser, new Claim("userType", "Student"));
-            //    }
-            //}
 
             foreach (var student in _context.Students) {
                 await CreateUserWithRole(student.Name, student.Email, "Student");
             }
 
-            //// Assign the 'Employee' role to students
-            //foreach (var user in _context.Employees) {
-            //    IdentityUser[] students = new IdentityUser[9];
-            //    var identityUser = new IdentityUser {
-            //        UserName = user.Name,
-            //    };
 
-            //    var result = await _userManager.CreateAsync(identityUser, password);
-            //    if (result.Succeeded) {
-            //        var res = await _userManager.AddClaimAsync(identityUser, new Claim("userType", "Employee"));
-            //    }
-            //}
-            // Create users for employees
             foreach (var employee in _context.Employees) {
                 await CreateUserWithRole(employee.Name, employee.Email, "Employee");
             }
