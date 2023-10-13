@@ -23,23 +23,10 @@ namespace Infrastructure.Data {
         }
 
         public async Task AssignRolesToStudentsAndEmployees() {
-            try {
+            await EnsureRoleExists("Student");
 
 
-                await EnsureRoleExists("Student");
-            }
-            catch (Exception ex) {
-                string errorMessage = ex.Message;
-                await Console.Out.WriteLineAsync(errorMessage);
-            }
-
-            try {
-                await EnsureRoleExists("Employee");
-            }
-            catch (Exception ex) {
-                string errorMessage = ex.Message;
-                await Console.Out.WriteLineAsync(errorMessage);
-            }
+            await EnsureRoleExists("Employee");
 
             foreach (var student in _context.Students) {
                 await CreateUserWithRole(student.Name, student.Email, "Student");
