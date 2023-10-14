@@ -21,6 +21,8 @@ namespace UI.Controllers {
 
 
 
+
+
 		//ALL PACKETS
 		[Authorize(Policy = "Student")]
 		public IActionResult Packets() {
@@ -36,13 +38,15 @@ namespace UI.Controllers {
 		[Authorize(Policy = "Student")]
 		public IActionResult PacketDetails(int id) {
 			var packet = _packetRepository.GetPacketById(id);
-			var demoList = _demoProductRepository.GetDemoProducts(packet.Type);
 
 			
 			if (packet == null) {
 				return View("Packets");
 			}
-			return View((packet, demoList));
+
+            var demoList = _demoProductRepository.GetDemoProducts(packet.Type);
+
+            return View((packet, demoList));
 		}
 
 
