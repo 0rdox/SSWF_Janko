@@ -86,20 +86,22 @@ namespace UI.Tests.Controllers {
         //    Assert.NotNull(model); // Ensure the model is not null
         //                           // Add additional assertions based on the specific scenario
 
-     //   }
+        //   }
 
-        [Fact]
-        public void PacketDetails_WithValidId_ReturnsViewResult() {
-            // Arrange
+        //   wtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawd
+        //change to theory
+        //[Fact]
+        //public void PacketDetails_WithValidId_ReturnsViewResult() {
+        //    // Arrange
 
 
-            // Act
-            var result = _studentController.PacketDetails(1);
+        //    // Act
+        //    var result = _studentController.PacketDetails(1);
 
-            // Assert
-            Assert.IsType<ViewResult>(result);
-        }
-
+        //    // Assert
+        //    Assert.IsType<ViewResult>(result);
+        //}
+        //wtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawdwtaawtawd
         //[Fact]
         //public void PacketDetails_WithInvalidId_ReturnsViewResult() {
         //    // Arrange
