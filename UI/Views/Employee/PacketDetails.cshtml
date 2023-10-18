@@ -94,6 +94,14 @@
 				}
 			</div>
 
+				@if ((bool)ViewData["CanEdit"]) {
+				<form asp-controller="Employee" asp-action="DeletePacket" method="post">
+					<input type="hidden" name="id" value="@Model.Item1.Id" />
+					<button type="submit" class="btn btn-danger delete-product-button">Verwijder pakket</button>
+				</form>
+				<button class="btn btn delete-product-button">Pas pakket aan</button>
+			}
+
 		</div>
 		<div class="packet-image">
 			<!-- Your packet image goes here -->

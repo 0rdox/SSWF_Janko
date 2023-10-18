@@ -11,10 +11,17 @@ namespace Domain.Models {
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+
+        [Required(ErrorMessage = "Naam is verplicht")]
         public string Name { get; set; }
         public CityEnum City { get; set; }
         public CanteenEnum Canteen { get; set; }
         public Canteen CanteenNavigation { get; set; }
+
+        [Required(ErrorMessage = "Pickup time is required.")]
+        [Display(Name = "Ophaaltijd")]
+        [DataType(DataType.DateTime)]
+
         public DateTime DateTime { get; set; } //ophalen
         public DateTime MaxDateTime { get; set; } //max tijd ophalen
         public bool OverEighteen { get; set; }
@@ -22,6 +29,9 @@ namespace Domain.Models {
         //Many to many
         public List<Product> Products { get; set; }
         [Column(TypeName = "decimal(5, 2)")]
+
+        [Required(ErrorMessage = "Prijs is verplicht")]
+
         public decimal Price { get; set; }
         public TypeEnum Type { get; set; } //enum
 
@@ -47,11 +57,23 @@ namespace Domain.Models {
         }
         public Packet(string name, DateTime dateTime, List<Product> products, decimal price, TypeEnum type, string imageUrl) {
             Name = name;
+
+
+            //if (!PickupTimeIsValid(dateTime)) {
+            //    throw new ArgumentException("Invalid pickup time. Pickup time must be within 48 hours from now.");
+            //}
+
+
             DateTime = dateTime;
             //Max tijd van ophalen is 6u na originele ophal moment
             MaxDateTime = dateTime.AddHours(6);
+
+
             //Producten worden gecheckt op of het alcohol bevat, zo ja? packet is 18+
             OverEighteen = IsOverEighteen(products);
+
+
+
             Products = products;
             Price = price;
             Type = type;
@@ -77,39 +99,12 @@ namespace Domain.Models {
         }
 
 
-        public List<Product> AddDemoProducts() {
-            List<Product> products = new List<Product>();
-
-            switch (this.Type) {
-                case TypeEnum.Drankpakket:
-                //products.Add(new Product { Id = 10, Name = "Bier", Alcohol = true, ImageUrl = "https://thumbs.dreamstime.com/b/koud-bier-43280582.jpg" });
-                //products.Add(new Product { Id = 11,  Name = "Wijn", Alcohol = true, ImageUrl = "https://static.vecteezy.com/ti/gratis-vector/p3/7324461-wijnglazen-met-witte-wijn-illustratie-van-wijnglazen-geisoleerd-op-witte-achtergrond-gratis-vector.jpg" });
-                //products.Add(new Product { Id = 12, Name = "Whisky", Alcohol = true, ImageUrl = "https://img.freepik.com/premium-photo/glas-schotse-whisky-en-ijs-op-een-witte-achtergrond_38145-1376.jpg?w=2000" });
-
-
-                break;
-                case TypeEnum.Broodpakket:
-
-                Product prod1 = new Product("Worstenbroodje", false, "https://www.hetzeilbergsbakkertje.nl/wp-content/uploads/JPM0008-Worstenbroodje-open.jpg");
-                Product prod2 = new Product("Worstenbroodje", false, "https://www.hetzeilbergsbakkertje.nl/wp-content/uploads/JPM0008-Worstenbroodje-open.jpg");
-                Product prod3 = new Product("Worstenbroodje", false, "https://www.hetzeilbergsbakkertje.nl/wp-content/uploads/JPM0008-Worstenbroodje-open.jpg");
-                products.Add(prod1);
-                products.Add(prod2);
-                products.Add(prod3);
-
-                //products.Add(new Product { Id = 1, Name = "Worstenbroodje", Alcohol = false, ImageUrl = "https://www.hetzeilbergsbakkertje.nl/wp-content/uploads/JPM0008-Worstenbroodje-open.jpg" });
-                //products.Add(new Product { Id = 2, Name = "Saucijzenbroodje", Alcohol = false, ImageUrl = "https://www.bakkerijvoortman.nl/wp/wp-content/uploads/2015/02/saucbr..png" });
-                //products.Add(new Product { Id = 3, Name = "Kaassoufflé", Alcohol = false, ImageUrl = "https://www.ahealthylife.nl/wp-content/uploads/2021/06/Kaassouffle_voedingswaarde-1.jpg" });
-                break;
-
-                case TypeEnum.WarmeMaaltijd:
-                break;
-                case TypeEnum.Unknown:
-                break;
-            }
-
-            return products;
+        public bool PickupTimeIsValid(DateTime pickupTime) {
+            var maxAllowedTime = DateTime.Now.AddHours(48);
+            return pickupTime >= DateTime.Now && pickupTime <= maxAllowedTime;
         }
+
+
     }
 }
 

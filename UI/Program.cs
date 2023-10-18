@@ -33,6 +33,7 @@ builder.Services.AddScoped<SeedData>();
 
 
 //--------------------------DATABASE PARTS--------------------------\\
+//change database connection strings to azure
 var connectionStringApp = builder.Configuration.GetConnectionString("AzureAppDBString");
 var connectionStringIdentity = builder.Configuration.GetConnectionString("AzureIdentityDBString");
 
@@ -75,6 +76,8 @@ builder.Services.AddAuthorization(policyBuilder => {
     });
 });
 
+//todo: access denied method
+
 var app = builder.Build();
 
 //session
@@ -110,9 +113,9 @@ await roleAssigner.AssignRolesToStudentsAndEmployees();
 
 //Seed date for PacketContext and SecurityContext
 using (var roleScope = app.Services.CreateScope()) {
-	var service = roleScope.ServiceProvider;
-	var dataSeeder = service.GetService<SeedData>();
-	dataSeeder?.SeedDatabase();
+    var service = roleScope.ServiceProvider;
+    var dataSeeder = service.GetService<SeedData>();
+    dataSeeder?.SeedDatabase();
 }
 
 //using var scope3 = app.Services.CreateScope();
@@ -121,8 +124,15 @@ using (var roleScope = app.Services.CreateScope()) {
 
 app.Run();
 
+//WARNING USING AZURE DATABASE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//maybe i first need to push git before the database updates in azure? that seems dumb but maybe
+//check why add-migration and update-database doesnt update the azure database
+//maybe in code clear database and then rebuild using seedData and add dummy data
+//
+//TODO: change demo products
 
-
+//TODO: add input validation into form. 
+//TODO: Update and delete packet. 
 
 
 

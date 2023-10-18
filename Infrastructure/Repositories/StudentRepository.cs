@@ -8,7 +8,7 @@ using Domain.Services;
 using Infrastructure.Data;
 
 namespace Infrastructure.Repositories {
-	public class StudentRepository : IStudentRepository {
+    public class StudentRepository : IStudentRepository {
 		private readonly AppDBContext _context;
 
 		public StudentRepository(AppDBContext context) {
@@ -20,7 +20,11 @@ namespace Infrastructure.Repositories {
 			await _context.SaveChangesAsync();
 		}
 
-		public IEnumerable<Student> GetStudents() {
+        public Student GetStudentById(int studentId) {
+			return _context.Students.FirstOrDefault(a => a.Id == studentId);
+        }
+
+        public IEnumerable<Student> GetStudents() {
 			return _context.Students;
 		}
 	}
