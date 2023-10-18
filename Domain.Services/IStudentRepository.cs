@@ -11,5 +11,7 @@ namespace Domain.Services {
 		IEnumerable<Student> GetStudents();
 
 		Task CreateStudent(Student student);
+
+		Student GetStudentById(int studentId);
 	}
 }

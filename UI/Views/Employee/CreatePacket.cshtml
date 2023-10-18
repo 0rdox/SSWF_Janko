@@ -2,6 +2,8 @@
     Layout = "_LayoutEmployee";
 }
 
+@model Domain.Models.Packet
+
 <!DOCTYPE html>
 <html>
 
@@ -39,21 +41,6 @@
             margin-left: 10px;
         }
 
-        .below_buttons {
-            display: flex;
-            justify-content: center;
-        }
-
-        .btn-primary{
-            margin-right:5px;
-        }
-
-        .btn-danger {
-            margin-left: 5px;
-        }
-
-      
-
     </style>
 </head>
 
@@ -63,16 +50,20 @@
         <h1>Create Packet</h1>
 
         <form id="myform" method="post" action="/Employee/CreatePacket">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <!-- Add this inside the form group where you want to display the validation message -->
 
             <div class="form-group">
                 <div class="row">
                     <div class="col-md-9">
                         <label for="Name">Naam:</label>
                         <input type="text" class="form-control" id="Name" name="name">
+                        <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
                     <div class="col-md-3">
                         <label for="Price">Prijs:</label>
                         <input type="number" class="form-control" id="Price" name="price">
+                        <span asp-validation-for="Price" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -82,18 +73,23 @@
                 <select class="form-control" id="Type" name="Type">
                     <option value="TypeEnum.Broodpakket">Broodpakket</option>
                     <option value="TypeEnum.Drankpakket">Drankpakket</option>
-                    <option value="TypeEnum.WarmeMaaltijd">Warme Maaltijd</option>
+                    @if ((bool)ViewData["WarmMeals"]) {
+                        <option value="WarmeMaaltijd">Warme Maaltijd</option>
+                    }
                 </select>
+                @*     <span asp-validation-for="Type" class="text-danger"></span> *@
             </div>
 
             <div class="form-group">
                 <label for="DateTime">Ophaaltijd:</label>
                 <input type="datetime-local" class="form-control" id="DateTime" name="pickupTime">
+                <span asp-validation-for="DateTime" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label for="ImageUrl">Afbeelding URL:</label>
                 <input type="url" class="form-control" id="ImageUrl" name="imageUrl">
+                <span asp-validation-for="ImageUrl" class="text-danger"></span>
             </div>
 
             <button type="button" class="btn btn-success" id="addProduct">Add Product</button>
@@ -128,6 +124,7 @@
                     <div class="form-group">
                         <label for="ProductName">Product Name:</label>
                         <input type="text" class="form-control" id="ProductName" name="ProductName">
+
                     </div>
                     <div class="form-group">
                         <label for="ProductAlcohol" class="form-check-label">Alcohol:</label>
@@ -151,7 +148,7 @@
     <script>
 
         var productsData = [];
-
+        //   updateProductList();
 
         //CLICK ADDPRODUCT TO SHOW ProductModal
         $("#addProduct").click(function () {
@@ -218,12 +215,27 @@
             for (var i = 0; i < productsData.length; i++) {
                 var product = productsData[i];
 
+
+                // Create a "Delete" button for each product
+                var deleteButton = $("<div><button class='btn btn-danger btn-sm delete-product'>Verwijderen</button></div>");
+                deleteButton.data("index", i); // Store the index of the product in the button's data
+
                 var productItem = $("<div class='product-item'></div>");
                 var productName = $("<div class='ProductLabel'>Product Name: " + product.Name + "</div>");
                 var productAlcohol = $("<div class='ProductLabel'>Alcohol: " + (product.Alcohol ? "Yes" : "No") + "</div>");
                 var productImage = $("<img src='" + product.ImageUrl + "' alt='Product Image'>");
 
-                productItem.append(productName, productAlcohol, productImage);
+
+
+                // Add a click event handler for the delete button
+                deleteButton.click(function () {
+                    var index = $(this).data("index");
+                    // Remove the product from the array and update the list
+                    productsData.splice(index, 1);
+                    updateProductList();
+                });
+
+                productItem.append(productName, productAlcohol, productImage, deleteButton);
                 productListElement.append(productItem);
             }
         }
@@ -231,6 +243,17 @@
         $("#saveProduct").click(function () {
             updateProductList();
         });
+
+
+                        // // Click event handler for the submit button
+                        // $("#myform").submit(function (e) {
+                        //     // Check if there are no products added
+                        //     if (productsData.length === 0) {
+                        //         e.preventDefault(); // Prevent the form from being submitted
+                        //         alert("U moet minimaal 1 product toevoegen");
+                        //     }
+                        //     // Continue with the form submission if products are added
+                        // });
 
 
 

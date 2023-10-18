@@ -8,6 +8,7 @@ using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using Newtonsoft.Json;
+using Infrastructure.Migrations.AppDB;
 
 namespace UI.Controllers {
     public class EmployeeController : Controller {
@@ -36,6 +37,12 @@ namespace UI.Controllers {
             var demoList = _demoProductRepository.GetDemoProducts(packet.Type);
 
 
+            var canteen = _canteenRepository.GetCanteenById(GetCanteenID());
+
+
+            bool canEdit = packet.CanteenNavigation == canteen; // Adjust this condition as needed
+            ViewData["CanEdit"] = canEdit;
+
             if (packet == null) {
                 return View("Packets");
             }
@@ -45,33 +52,56 @@ namespace UI.Controllers {
 
         [Authorize(Policy = "Employee")]
         public IActionResult CreatePacket() {
+            var canteen = _canteenRepository.GetCanteenById(GetCanteenID());
+            if (canteen.OffersHotMeals == true) {
+                ViewData["WarmMeals"] = true;
+            } else {
+                ViewData["WarmMeals"] = false;
+            }
             return View();
         }
 
         [Authorize(Policy = "Employee")]
         [HttpPost]
         public async Task<IActionResult> CreatePacket(string name, decimal price, DateTime pickupTime, string products, TypeEnum type, string imageUrl) {
-            //Get location for packet
+
+            //if (!ModelState.IsValid) {
+            //    return View();
+            //}
+
             var canteenLocation = _canteenRepository.GetCanteenById(GetCanteenID()).Location;
             var canteenCity = _canteenRepository.GetCanteenById(GetCanteenID()).City;
 
             List<Product> productObjects = JsonConvert.DeserializeObject<List<Product>>(products);
 
-            //"[{\"Name\":\"Bread\",\"Alcohol\":false,\"ImageUrl\":\"bread.img\"},{\"Name\":\"bread2\",\"Alcohol\":true,\"ImageUrl\":\"breadimg2\"}]"
+
+
             Packet packet = new Packet(name, pickupTime, productObjects, price, type, imageUrl);
 
-            DateTime testMaxDateTime = packet.MaxDateTime;
-            bool testOverEighteen = packet.OverEighteen;
-            //_packetRepository.CreatePacket(packet);
-
-            //check max date time
-            //check over eighteen
+            await _packetRepository.CreatePacket(packet);
 
 
 
-            return View();
+            //redirect to action
+
+            return RedirectToAction("Packets");
         }
 
+
+        [Authorize(Policy = "Employee")]
+        [HttpPost]
+        public async Task<IActionResult> DeletePacket(int id) {
+            var packet = _packetRepository.GetPacketById(id);
+
+            if (packet == null) {
+                return NotFound(); // Packet not found
+            }
+
+            // Check if the employee is authorized to delete the packet. You may want to add authorization logic here.
+
+            await _packetRepository.DeletePacket(packet);
+            return RedirectToAction("Packets");
+        }
 
 
         [Authorize(Policy = "Employee")]
@@ -90,6 +120,10 @@ namespace UI.Controllers {
 
             return View((packetsOurs, packetsOthers));
         }
+
+
+
+
 
         public int GetCanteenID() {
             var userName = HttpContext.Session.GetString("UserName");
