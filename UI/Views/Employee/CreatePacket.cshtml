@@ -102,11 +102,9 @@
 
             <!--hidden input element for products-->
             <input type="hidden" name="products" id="products">
-
-            <div class="d-flex justify-content-center mt-3">
+            <div class="below_buttons">
                 <button type="submit" class="btn btn-primary">Sla Op</button>
-                <button type="button" class="btn btn-danger">Annuleren</button>
-
+                <button type="button" class="btn btn-danger" id="cancelButton">Annuleren</button>
             </div>
 
         </form>
@@ -169,7 +167,9 @@
             $("#productModal").modal("hide");
         });
 
-
+        document.getElementById("cancelButton").addEventListener("click", function () {
+            window.history.back();
+        });
 
         $("#saveProduct").click(function () {
             // Get product information from the modal form fields

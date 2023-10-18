@@ -27,8 +27,8 @@ namespace UI.Controllers {
             var packets = _packetRepository.GetPackets()
                 .Where(a => a.ReservedById == null);
 
-            return View(packets);
-        }
+			return View(packets);
+		}
 
 
 
