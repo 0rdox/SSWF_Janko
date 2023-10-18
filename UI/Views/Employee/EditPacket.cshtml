@@ -1,0 +1,310 @@
+﻿@{
+	Layout = "_LayoutEmployee";
+}
+
+@model Domain.Models.Packet
+
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>Create Packet</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<style>
+		.container {
+			border: solid 3px;
+			padding: 10px;
+			margin-top: 10px;
+			margin-bottom: 60px;
+		}
+
+		/* Style product items to be displayed inline */
+		.product-item {
+			display: inline-block;
+			margin-right: 20px;
+		}
+
+			/* Limit the size of images within product items to 100px by 100px */
+			.product-item img {
+				width: 100px;
+				height: 100px;
+				object-fit: contain;
+			}
+
+
+		.ProductLabel {
+			margin-right: 20px;
+		}
+
+		.form-check-input {
+			margin-left: 10px;
+		}
+
+	</style>
+</head>
+
+<body>
+	<div class="container">
+
+		<h1>Edit Packet</h1>
+
+		<form id="myform" method="post" action="/Employee/EditPacket">
+			<div asp-validation-summary="All" class="text-danger"></div>
+			<!-- Add this inside the form group where you want to display the validation message -->
+
+			<div class="form-group">
+				<div class="row">
+					<div class="col-md-9">
+						<label asp-for="Name">Naam:</label>
+						<input asp-for="Name" type="text" class="form-control" id="Name" name="name">
+						<span asp-validation-for="Name" class="text-danger"></span>
+					</div>
+					<div class="col-md-3">
+						<label asp-for="Price">Prijs:</label>
+						<input asp-for="Price" type="number" class="form-control" id="Price" name="price">
+						<span asp-validation-for="Price" class="text-danger"></span>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label asp-for="Type">Type pakket:</label>
+				<select asp-for="Type" class="form-control" id="Type" name="Type">
+					<option value="TypeEnum.Broodpakket">Broodpakket</option>
+					<option value="TypeEnum.Drankpakket">Drankpakket</option>
+					@if ((bool)ViewData["WarmMeals"]) {
+						<option value="WarmeMaaltijd">Warme Maaltijd</option>
+					}
+				</select>
+				@*     <span asp-validation-for="Type" class="text-danger"></span> *@
+			</div>
+
+			<div class="form-group">
+				<label asp-for="DateTime">Ophaaltijd:</label>
+				<input asp-for="DateTime" type="datetime-local" class="form-control" id="DateTime" name="pickupTime">
+				<span asp-validation-for="DateTime" class="text-danger"></span>
+			</div>
+
+			<div class="form-group">
+				<label asp-for="ImageUrl">Afbeelding URL:</label>
+				<input asp-for="ImageUrl" type="url" class="form-control" id="ImageUrl" name="imageUrl">
+				<span asp-validation-for="ImageUrl" class="text-danger"></span>
+			</div>
+
+			<button type="button" class="btn btn-success" id="addProduct">Add Product</button>
+
+			<!-- List of products -->
+			<div class="form-group" id="productslist">
+				@if (Model.Products != null) {
+					@foreach (var product in Model.Products) {
+						<div class="product-item">
+							<div class="ProductLabel">Product Name: @product.Name</div>
+							<div class="ProductLabel">Alcohol: @(product.Alcohol ? "Yes" : "No")</div>
+							<img src="@product.ImageUrl" alt="Product Image">
+							<div>
+								<a class="btn btn-danger btn-sm delete-product" @* data-product-id="@product.Id" *@>Verwijderen</a>
+							</div>
+						</div>
+					}
+				}
+			</div>
+
+			<input type="hidden" name="id" value="@Model.Id">
+
+			<!--hidden input element for products-->
+			<input type="hidden" name="products" id="products">
+			<div class="below_buttons">
+				<button type="submit" class="btn btn-primary">Sla Op</button>
+				<button type="button" class="btn btn-danger" id="cancelButton">Annuleren</button>
+			</div>
+
+		</form>
+	</div>
+
+	<!-- Product Form Modal -->
+	<div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="productModalLabel">Add Product</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="ProductName">Product Name:</label>
+						<input type="text" class="form-control" id="ProductName" name="ProductName">
+
+					</div>
+					<div class="form-group">
+						<label for="ProductAlcohol" class="form-check-label">Alcohol:</label>
+						<input type="checkbox" class="form-check-input" id="ProductAlcohol" name="ProductAlcohol">
+					</div>
+					<div class="form-group">
+						<label for="ProductImageUrl">Product Image URL:</label>
+						<input type="url" class="form-control" id="ProductImageUrl" name="ProductImageUrl">
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" id="closeProduct">Close</button>
+					<button type="button" class="btn btn-primary" id="saveProduct">Save Product</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script>
+
+		var productsData = [];
+
+
+
+		
+
+
+
+		
+		// delete existing prods
+		// $(document).ready(function () {
+		//     Attach a click event handler to the "Verwijderen" buttons
+		//     $(".delete-product").click(function () {
+
+		//         console.log("BUTTON CLICK", "Clicked weird button");
+		//         Get the product ID from the data attribute
+		//         var productId = $(this).data("product-id");
+
+		//         Find the product element with the matching product ID and remove it
+		//         $("#productslist").find('.product-item').each(function () {
+		//             if ($(this).data("product-id") === productId) {
+		//                 $(this).remove();
+		//             }
+		//         });
+		//     });
+		// });
+
+
+
+
+
+
+		//CLICK ADDPRODUCT TO SHOW ProductModal
+		$("#addProduct").click(function() {
+		$("#productModal").modal("show");
+			console.log("BUTTON CLICK", "Clicked ADDPRODUCT");
+		});
+
+
+
+
+
+		$("#closeProduct").click(function() {
+			console.log("BUTTON CLICK", "Clicked CLOSEPRODUCT");
+
+		$("#ProductName").val("");
+		$("#ProductAlcohol").prop("checked", false);
+		$("#ProductImageUrl").val("");
+
+		$("#productModal").modal("hide");
+		});
+
+		document.getElementById("cancelButton").addEventListener("click", function() {
+			window.history.back();
+		});
+
+		$("#saveProduct").click(function() {
+			// Get product information from the modal form fields
+			var productName = $("#ProductName").val();
+			var productAlcohol = $("#ProductAlcohol").prop("checked");
+			var productImageUrl = $("#ProductImageUrl").val();
+
+			// Create an object to represent the product
+			var product = {
+				Name: productName,
+			Alcohol: productAlcohol,
+			ImageUrl: productImageUrl
+		};
+
+		productsData.push(product);
+
+
+
+
+		$("#ProductName").val("");
+		$("#ProductAlcohol").prop("checked", false);
+		$("#ProductImageUrl").val("");
+
+		// Close the modal
+		$("#productModal").modal("hide");
+		});
+
+
+		function updateProductList() {
+		console.log("test", "update product testing log");
+		var productListElement = $("#productslist");
+
+
+		let hidden_input = document.querySelector("[name = 'products']")
+		hidden_input.value = JSON.stringify(productsData)
+
+		console.log("hidden", hidden_input.value);
+		console.log("proddata", productsData);
+		// Clear the existing content in the product list
+		productListElement.html('');
+
+		// Loop through the productsData array and create HTML elements for each product
+		for (var i = 0; i < productsData.length; i++) {
+			var product = productsData[i];
+
+
+			// Create a "Delete" button for each product
+			var deleteButton = $("<div><button class='btn btn-danger btn-sm delete-product'>Verwijderen</button></div>");
+			deleteButton.data("index", i); // Store the index of the product in the button's data
+
+			var productItem = $("<div class='product-item'></div>");
+			var productName = $("<div class='ProductLabel'>Product Name: " + product.Name + "</div>");
+			var productAlcohol = $("<div class='ProductLabel'>Alcohol: " + (product.Alcohol ? "Yes" : "No") + "</div>");
+			var productImage = $("<img src='" + product.ImageUrl + "' alt='Product Image'>");
+
+
+
+			// Add a click event handler for the delete button
+			deleteButton.click(function() {
+				console.log("BUTTON CLICK", "Clicked DELETEPRODUCT");
+				var index = $(this).data("index");
+				// Remove the product from the array and update the list
+				productsData.splice(index, 1);
+				updateProductList();
+			});
+
+		productItem.append(productName, productAlcohol, productImage, deleteButton);
+		productListElement.append(productItem);
+		}
+	}
+
+		$("#saveProduct").click(function () {
+		console.log("BUTTON CLICK", "Clicked SAVEPRODUCT");
+		updateProductList();
+	});
+
+
+							// // Click event handler for the submit button
+							// $("#myform").submit(function (e) {
+							//     // Check if there are no products added
+							//     if (productsData.length === 0) {
+							//         e.preventDefault(); // Prevent the form from being submitted
+							//         alert("U moet minimaal 1 product toevoegen");
+							//     }
+							//     // Continue with the form submission if products are added
+							// });
+
+
+
+
+
+	</script>
+</body>
+</html>

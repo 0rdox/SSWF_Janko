@@ -27,8 +27,8 @@ namespace UI.Controllers {
             var packets = _packetRepository.GetPackets()
                 .Where(a => a.ReservedById == null);
 
-			return View(packets);
-		}
+            return View(packets);
+        }
 
 
 
@@ -46,6 +46,9 @@ namespace UI.Controllers {
 
             if (packet.OverEighteen && studentAge < 18) {
                 ViewData["OverEighteen"] = false;
+            }
+            else {
+                ViewData["OverEighteen"] = true;
             }
 
             if (packet == null) {

@@ -22,7 +22,8 @@
             width:500px;
             height:500px;
             margin:50px;
-            object-fit:contain;
+            border:1px solid green;
+            object-fit: cover;
         }
 
 
@@ -118,10 +119,9 @@
                         <input type="hidden" name="id" value="@Model.Item1.Id" />
                         <button type="submit" class="btn btn-danger delete-product-button">Verwijder pakket</button>
                     </form>
-                    <form asp-controller="Employee" asp-action="DeletePacket" method="post">
-                        <input type="hidden" name="id" value="@Model.Item1.Id" />
-                        <button type="submit" class="btn">Pas pakket aan</button>
-                    </form>
+                
+                    <a asp-controller="Employee" asp-action="EditPacket" asp-route-id="@Model.Item1.Id" class="btn btn-primary">Pas pakket aan</a>
+
                 </div>
             }
 

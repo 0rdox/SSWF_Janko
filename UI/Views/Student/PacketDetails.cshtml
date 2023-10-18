@@ -76,12 +76,6 @@
                 <input type="hidden" name="packetId" value="@Model.Item1.Id" />
 
  
-                @if ((bool)ViewData["OverEighteen"]) {
-                    <button class="reserve-button" type="submit">Reserveer</button>
-                } else {
-                    <div>Pakket is 18+, u kunt dit niet reserveren</div>
-                } 
-
             </form>
             <p style="margin-top:10px">Mogelijke producten:</p>
             <div class="product_images d-flex flex-wrap">
@@ -97,6 +91,13 @@
                     </div>
                 }
             </div>
+
+            @if ((bool)ViewData["OverEighteen"]) {
+                <button class="reserve-button" type="submit">Reserveer</button>
+            }
+            else {
+                <div>Pakket is 18+, u kunt dit niet reserveren</div>
+            }
 
         </div>
         <div class="packet-image">

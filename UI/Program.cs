@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Domain.Services;
 using Infrastructure.Repositories;
 using Infrastructure;
+using Microsoft.Extensions.Options;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,6 +63,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(conf => {
 builder.Services.AddAuthentication("CookieAuth")
     .AddCookie(conf => {
         conf.Cookie.Name = "Cookie";
+      //  conf.AccessDeniedPath = "/home/AccessDenied";
         conf.LoginPath = "/Account/Login";
     });
 
@@ -76,8 +79,14 @@ builder.Services.AddAuthorization(policyBuilder => {
     });
 });
 
+//builder.Services.AddControllers().AddJsonOptions(options => {
+//    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+//});
 //todo: site.css for things like hover, and font, fontsize, etc.
 //todo: access denied method
+//todo: edit products
+
+//todo: check how when creating a packet the correct city and canteen get added
 
 var app = builder.Build();
 
@@ -107,6 +116,16 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Login}/{id?}");
+
+////catch 404
+//app.MapControllerRoute(
+//    name: "catchAll",
+//    pattern: "{*url}",
+//    defaults: new { controller = "Account", action = "Login" }
+//);
+
+
+
 
 app.UseSession();
 

@@ -12,8 +12,8 @@ namespace Domain.Models {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Naam is verplicht")]
-        public string Name { get; set; }
+		[Required(ErrorMessage = "Naam is verplicht")]
+		public string Name { get; set; }
         public CityEnum City { get; set; }
         public CanteenEnum Canteen { get; set; }
         public Canteen CanteenNavigation { get; set; }
@@ -59,10 +59,9 @@ namespace Domain.Models {
             Name = name;
 
 
-            //if (!PickupTimeIsValid(dateTime)) {
-            //    throw new ArgumentException("Invalid pickup time. Pickup time must be within 48 hours from now.");
-            //}
-
+            if (!PickupTimeIsValid(dateTime)) {
+                throw new ArgumentException("Invalid pickup time. Pickup time must be within 48 hours from now.");
+            }
 
             DateTime = dateTime;
             //Max tijd van ophalen is 6u na originele ophal moment
@@ -82,8 +81,34 @@ namespace Domain.Models {
         }
 
 
-        //Do this after clicking submit?
-        public bool IsOverEighteen(List<Product> products) {
+		public Packet(string name, DateTime dateTime, List<Product> products, CityEnum city, CanteenEnum canteen, decimal price, TypeEnum type, string imageUrl) {
+			Name = name;
+
+
+			if (!PickupTimeIsValid(dateTime)) {
+				throw new ArgumentException("Invalid pickup time. Pickup time must be within 48 hours from now.");
+			}
+
+			DateTime = dateTime;
+			//Max tijd van ophalen is 6u na originele ophal moment
+			MaxDateTime = dateTime.AddHours(6);
+
+
+			//Producten worden gecheckt op of het alcohol bevat, zo ja? packet is 18+
+			OverEighteen = IsOverEighteen(products);
+
+
+
+			Products = products;
+			Price = price;
+			Type = type;
+			ImageUrl = imageUrl;
+			ReservedBy = null;
+		}
+
+
+		//Do this after clicking submit?
+		public bool IsOverEighteen(List<Product> products) {
             foreach (var product in products) {
                 if (product.Alcohol) {
                     return true;

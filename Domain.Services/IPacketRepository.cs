@@ -14,7 +14,7 @@ namespace Domain.Services {
         Task CreatePacket(Packet packet);
 
         Task DeletePacket(Packet packet);
-        Task UpdatePacket(int packetId, string? newName = null, decimal? newPrice = null, DateTime? newPickupTime = null, List<Product>? newProducts = null, TypeEnum? newType = null, string? newImageUrl = null);
+        Task UpdatePacket(int packetId, Packet packet);
 
         Packet? GetPacketById(int id);
 

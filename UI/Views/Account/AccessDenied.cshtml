@@ -1,0 +1,15 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+
+
+<p>Sorry, access denied. Click <a href="#" id="goBackLink">here</a> to go back</p>
+
+<script>
+    // Add an event listener to the link to go back when clicked.
+    document.getElementById("goBackLink").addEventListener("click", function (event) {
+        event.preventDefault(); // Prevent the default link behavior (navigating to an empty URL).
+        history.back(); // Use the browser's history to go back to the previous page.
+    });
+</script>

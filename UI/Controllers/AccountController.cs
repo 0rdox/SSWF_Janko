@@ -71,5 +71,9 @@ namespace UI.Controllers {
 			return View("Login");
 		}
 
-	}
+        public IActionResult AccessDenied() {
+            return View();
+        }
+
+    }
 }

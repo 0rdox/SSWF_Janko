@@ -22,14 +22,14 @@ namespace Infrastructure.Repositories {
             await _context.SaveChangesAsync();
         }
 
-        public  IEnumerable<Packet> GetPackets() {
+        public IEnumerable<Packet> GetPackets() {
             return _context.Packets;
         }
 
         public Packet? GetPacketById(int id) {
-            var products = _context.Products.Where(p => p.PacketId == id);
-
-            return _context.Packets.FirstOrDefault(a => a.Id == id);
+            return _context.Packets
+     .Include(p => p.Products) // Eager loading of Products
+     .FirstOrDefault(a => a.Id == id);
         }
 
         public async Task ReservePacket(int packetId, int studentId) {
@@ -46,7 +46,8 @@ namespace Infrastructure.Repositories {
 
                 if (existingReservation != null) {
                     //handle exception
-                } else {
+                }
+                else {
                     packet.ReservedBy = student;
                     await _context.SaveChangesAsync();
                 }
@@ -97,6 +98,23 @@ namespace Infrastructure.Repositories {
                 _context.Entry(packet).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task UpdatePacket(int packetId, Packet updatedPacket) {
+            // Implement the logic to update the packet
+     
+            var existingPacket = _context.Packets.FirstOrDefault(p => p.Id == packetId);
+            if (existingPacket != null) {
+                // Update the properties of the existing packet with the properties of the updatedPacket
+                existingPacket.Name = updatedPacket.Name;
+                existingPacket.Price = updatedPacket.Price;
+                existingPacket.Type = updatedPacket.Type;
+                existingPacket.DateTime = updatedPacket.DateTime;
+                existingPacket.ImageUrl = updatedPacket.ImageUrl;
+
+                await _context.SaveChangesAsync(); // Save changes to the
+            }
+            // You should also handle database updates if you're using a database
         }
 
     }
