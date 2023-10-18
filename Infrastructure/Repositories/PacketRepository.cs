@@ -22,7 +22,7 @@ namespace Infrastructure.Repositories {
             await _context.SaveChangesAsync();
         }
 
-        public IEnumerable<Packet> GetPackets() {
+        public  IEnumerable<Packet> GetPackets() {
             return _context.Packets;
         }
 

@@ -37,10 +37,10 @@ namespace UI.Controllers {
             var demoList = _demoProductRepository.GetDemoProducts(packet.Type);
 
 
-			var canteen = _canteenRepository.GetCanteenById(GetCanteenID());
+            var canteen = _canteenRepository.GetCanteenById(GetCanteenID());
 
 
-			bool canEdit = packet.CanteenNavigation == canteen; // Adjust this condition as needed
+            bool canEdit = packet.CanteenNavigation == canteen; // Adjust this condition as needed
             ViewData["CanEdit"] = canEdit;
 
             if (packet == null) {
@@ -74,34 +74,33 @@ namespace UI.Controllers {
 
             List<Product> productObjects = JsonConvert.DeserializeObject<List<Product>>(products);
 
-     
+
 
             Packet packet = new Packet(name, pickupTime, productObjects, price, type, imageUrl);
 
-          await  _packetRepository.CreatePacket(packet);
+            await _packetRepository.CreatePacket(packet);
 
 
 
             //redirect to action
 
-            return View("Packets");
+            return RedirectToAction("Packets");
         }
 
 
         [Authorize(Policy = "Employee")]
         [HttpPost]
         public async Task<IActionResult> DeletePacket(int id) {
-			var packet = _packetRepository.GetPacketById(id);
+            var packet = _packetRepository.GetPacketById(id);
 
-			if (packet == null) {
+            if (packet == null) {
                 return NotFound(); // Packet not found
             }
 
             // Check if the employee is authorized to delete the packet. You may want to add authorization logic here.
 
             await _packetRepository.DeletePacket(packet);
-
-            return RedirectToAction("Packets"); 
+            return RedirectToAction("Packets");
         }
 
 
@@ -123,7 +122,7 @@ namespace UI.Controllers {
         }
 
 
- 
+
 
 
         public int GetCanteenID() {

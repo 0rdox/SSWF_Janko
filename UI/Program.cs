@@ -76,6 +76,7 @@ builder.Services.AddAuthorization(policyBuilder => {
     });
 });
 
+//todo: site.css for things like hover, and font, fontsize, etc.
 //todo: access denied method
 
 var app = builder.Build();
