@@ -66,6 +66,12 @@ namespace UI.Controllers {
 			return View();
 
 		}
+
+		public IActionResult Account() {
+			return View();
+		}
+
+
 		public async Task<IActionResult> Logout() {
 			await _signInManager.SignOutAsync();
 			return View("Login");

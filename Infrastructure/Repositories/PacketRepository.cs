@@ -22,9 +22,8 @@ namespace Infrastructure.Repositories {
             await _context.SaveChangesAsync();
         }
 
-        public IEnumerable<Packet> GetPackets() {
-            return _context.Packets;
-        }
+        public IEnumerable<Packet> GetPackets() => _context.Packets;
+
 
         public Packet? GetPacketById(int id) {
             return _context.Packets
@@ -46,8 +45,7 @@ namespace Infrastructure.Repositories {
 
                 if (existingReservation != null) {
                     //handle exception
-                }
-                else {
+                } else {
                     packet.ReservedBy = student;
                     await _context.SaveChangesAsync();
                 }
@@ -102,7 +100,7 @@ namespace Infrastructure.Repositories {
 
         public async Task UpdatePacket(int packetId, Packet updatedPacket) {
             // Implement the logic to update the packet
-     
+
             var existingPacket = _context.Packets.FirstOrDefault(p => p.Id == packetId);
             if (existingPacket != null) {
                 // Update the properties of the existing packet with the properties of the updatedPacket

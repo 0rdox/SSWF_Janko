@@ -75,7 +75,7 @@
             <form method="post" asp-action="Reserve" asp-controller="Student">
                 <input type="hidden" name="packetId" value="@Model.Item1.Id" />
 
- 
+
             </form>
             <p style="margin-top:10px">Mogelijke producten:</p>
             <div class="product_images d-flex flex-wrap">
@@ -93,9 +93,11 @@
             </div>
 
             @if ((bool)ViewData["OverEighteen"]) {
-                <button class="reserve-button" type="submit">Reserveer</button>
-            }
-            else {
+                <form asp-controller="Student" asp-action="Reserve" method="post">
+                    <input type="hidden" name="packetId" value="@Model.Item1.Id">
+                    <button class="reserve-button" type="submit">Reserveer</button>
+                </form>
+            } else {
                 <div>Pakket is 18+, u kunt dit niet reserveren</div>
             }
 

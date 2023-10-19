@@ -87,6 +87,8 @@ builder.Services.AddAuthorization(policyBuilder => {
 //todo: edit products
 
 //todo: check how when creating a packet the correct city and canteen get added
+//todo: remove reserve button when reserved is true
+
 
 var app = builder.Build();
 

@@ -25,7 +25,8 @@ namespace UI.Controllers {
         [Authorize(Policy = "Student")]
         public IActionResult Packets() {
             var packets = _packetRepository.GetPackets()
-                .Where(a => a.ReservedById == null);
+                .Where(a => a.ReservedById == null)
+                 .OrderBy(c => c.DateTime);
 
             return View(packets);
         }
@@ -76,7 +77,8 @@ namespace UI.Controllers {
 
 
             var packets = _packetRepository.GetPackets()
-                .Where(a => a.ReservedById == studentId);
+                .Where(a => a.ReservedById == studentId)
+                .OrderBy(c => c.DateTime);
 
             return View(packets);
         }
