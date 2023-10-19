@@ -81,7 +81,7 @@ namespace Domain.Models {
         }
 
 
-		public Packet(string name, DateTime dateTime, List<Product> products, CityEnum city, CanteenEnum canteen, decimal price, TypeEnum type, string imageUrl) {
+		public Packet(string name, DateTime dateTime, List<Product> products, Canteen canteen, decimal price, TypeEnum type, string imageUrl) {
 			Name = name;
 
 
@@ -96,7 +96,7 @@ namespace Domain.Models {
 
 			//Producten worden gecheckt op of het alcohol bevat, zo ja? packet is 18+
 			OverEighteen = IsOverEighteen(products);
-
+            CanteenNavigation = canteen;
 
 
 			Products = products;

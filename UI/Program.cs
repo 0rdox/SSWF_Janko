@@ -7,25 +7,29 @@ using Infrastructure.Repositories;
 using Infrastructure;
 using Microsoft.Extensions.Options;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+
+
 //--------------------------------SESSION-------------------------------\\
 builder.Services.AddDistributedMemoryCache()
-    .AddSession(options => {
-        options.IdleTimeout = TimeSpan.FromMinutes(10);
-    });
+	.AddSession(options => {
+		options.IdleTimeout = TimeSpan.FromMinutes(10);
+	});
 //--------------------------DEPENDENCY INJECTION--------------------------\\
 builder.Services
-    .AddScoped<ICanteenRepository, CanteenRepository>()
-    .AddScoped<IPacketRepository, PacketRepository>()
-    .AddScoped<IProductRepository, ProductRepository>()
-    .AddScoped<IEmployeeRepository, EmployeeRepository>()
-    .AddScoped<IStudentRepository, StudentRepository>()
-    .AddScoped<IDemoProductRepository, DemoProductRepository>();
+	.AddScoped<ICanteenRepository, CanteenRepository>()
+	.AddScoped<IPacketRepository, PacketRepository>()
+	.AddScoped<IProductRepository, ProductRepository>()
+	.AddScoped<IEmployeeRepository, EmployeeRepository>()
+	.AddScoped<IStudentRepository, StudentRepository>()
+	.AddScoped<IDemoProductRepository, DemoProductRepository>();
 
 
 builder.Services.AddScoped<RoleAssigner>();
@@ -41,42 +45,42 @@ var connectionStringIdentity = builder.Configuration.GetConnectionString("AzureI
 
 //DatabaseApp
 builder.Services.AddDbContext<AppDBContext>(options => {
-    options.UseSqlServer(connectionStringApp);
+	options.UseSqlServer(connectionStringApp);
 });
 //DatabaseIdentity
 builder.Services.AddDbContext<AppIdentityDBContext>(options => {
-    options.UseSqlServer(connectionStringIdentity);
+	options.UseSqlServer(connectionStringIdentity);
 });
 
 //IDENTITY
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(conf => {
-    conf.Password.RequiredLength = 4;
-    conf.Password.RequireDigit = false;
-    conf.Password.RequireNonAlphanumeric = false;
+	conf.Password.RequiredLength = 4;
+	conf.Password.RequireDigit = false;
+	conf.Password.RequireNonAlphanumeric = false;
 
-    // conf.SignIn.RequireConfirmedEmail = true;
+	// conf.SignIn.RequireConfirmedEmail = true;
 })
-    .AddEntityFrameworkStores<AppIdentityDBContext>()
-    .AddDefaultTokenProviders();
+	.AddEntityFrameworkStores<AppIdentityDBContext>()
+	.AddDefaultTokenProviders();
 
 
 builder.Services.AddAuthentication("CookieAuth")
-    .AddCookie(conf => {
-        conf.Cookie.Name = "Cookie";
-      //  conf.AccessDeniedPath = "/home/AccessDenied";
-        conf.LoginPath = "/Account/Login";
-    });
+	.AddCookie(conf => {
+		conf.Cookie.Name = "Cookie";
+		//  conf.AccessDeniedPath = "/home/AccessDenied";
+		conf.LoginPath = "/Account/Login";
+	});
 
 
 builder.Services.AddAuthorization(policyBuilder => {
-    policyBuilder.AddPolicy("Student", policy => {
-        policy.RequireAuthenticatedUser()
-              .RequireRole("Student");
-    });
-    policyBuilder.AddPolicy("Employee", policy => {
-        policy.RequireAuthenticatedUser()
-              .RequireRole("Employee");
-    });
+	policyBuilder.AddPolicy("Student", policy => {
+		policy.RequireAuthenticatedUser()
+			  .RequireRole("Student");
+	});
+	policyBuilder.AddPolicy("Employee", policy => {
+		policy.RequireAuthenticatedUser()
+			  .RequireRole("Employee");
+	});
 });
 
 //builder.Services.AddControllers().AddJsonOptions(options => {
@@ -88,7 +92,7 @@ builder.Services.AddAuthorization(policyBuilder => {
 
 //todo: check how when creating a packet the correct city and canteen get added
 //todo: remove reserve button when reserved is true
-
+//todo: logo, images
 
 var app = builder.Build();
 
@@ -116,8 +120,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Account}/{action=Login}/{id?}");
+	name: "default",
+	pattern: "{controller=Account}/{action=Login}/{id?}");
 
 ////catch 404
 //app.MapControllerRoute(
@@ -139,14 +143,14 @@ await roleAssigner.AssignRolesToStudentsAndEmployees();
 
 //Seed date for PacketContext and SecurityContext
 using (var roleScope = app.Services.CreateScope()) {
-    var service = roleScope.ServiceProvider;
-    var dataSeeder = service.GetService<SeedData>();
-    dataSeeder?.SeedDatabase();
+	var service = roleScope.ServiceProvider;
+	var dataSeeder = service.GetService<SeedData>();
+	dataSeeder?.SeedDatabase();
 }
 
-//using var scope3 = app.Services.CreateScope();
-//var dataSeeder2 = scope.ServiceProvider.GetRequiredService<SeedData>();
-//await dataSeeder2.AddAdditionalPackets();
+using var scope3 = app.Services.CreateScope();
+var dataseeder2 = scope.ServiceProvider.GetRequiredService<SeedData>();
+await dataseeder2.AddAdditionalPackets();
 
 app.Run();
 

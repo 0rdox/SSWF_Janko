@@ -55,6 +55,7 @@ namespace Infrastructure {
             _securityContext.Database.Migrate();
             _dbContext.Database.Migrate();
 
+            ClearData().Wait();
 
             if (!_dbContext.Packets.Any() && !_dbContext.DemoProducts.Any()) {
                 SeedDB().Wait();
@@ -94,14 +95,16 @@ namespace Infrastructure {
             Student[] students = {
                 new Student {Name = "John Doe", StudentNumber = 12345, DateOfBirth = new DateTime(2000, 5, 15), Email = "john.doe@example.com", City = CityEnum.Breda, Phone = "555-555-5555" },
                 new Student {Name = "Mike Evars", StudentNumber = 52341, DateOfBirth = new DateTime(1998, 3, 29),Email = "mike.evars@example.com",City = CityEnum.Tilburg,Phone = "555-555-5555" },
-                new Student{Name = "Kaitlyn Marek", StudentNumber = 51221, DateOfBirth = new DateTime(2001, 12, 18),Email = "kaitlyn.marek@example.com",City = CityEnum.Breda,Phone = "555-555-5555" }
+                new Student{Name = "Kaitlyn Marek", StudentNumber = 51221, DateOfBirth = new DateTime(2001, 12, 18),Email = "kaitlyn.marek@example.com",City = CityEnum.Breda,Phone = "555-555-5555" },
+                new Student{Name = "Oliver Boko", StudentNumber = 11231, DateOfBirth = new DateTime(2009, 12, 18),Email = "oliver.boko@example.com",City = CityEnum.Breda,Phone = "555-555-5555" }
             };
 
 
             var packets = new List<Packet> {
 
             new Packet { Name = "Lekkere Broodjes" , City = CityEnum.Breda,/*Products = broodjeList,*/ Canteen = CanteenEnum.LA, DateTime = DateTime.Now, Price = 8.99m, Type = TypeEnum.Broodpakket, ReservedById = null, ImageUrl = "https://rosco-catering.nl/wp-content/uploads/2020/06/Rosco-Catering-Bake-off-box-scaled.jpg" },
-            new Packet { Name = "Drankpakket", City = CityEnum.Breda, /*Products=drankList, */Canteen = CanteenEnum.LA, DateTime = DateTime.Now, Price = 14.99m, Type = TypeEnum.Drankpakket, ReservedById = null, ImageUrl = "https://www.foodandwine.com/thmb/a3jODP_x_GpJpD71zT3t3BYbtp8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/how-to-ship-wine-FT-BLOG1221-073f4b1897c34f04bff8ea71dadcba2c.jpg" }
+            new Packet { Name = "Drankpakket", City = CityEnum.Breda, /*Products=drankList, */Canteen = CanteenEnum.LA, DateTime = DateTime.Now, Price = 14.99m, Type = TypeEnum.Drankpakket, ReservedById = null, ImageUrl = "https://www.foodandwine.com/thmb/a3jODP_x_GpJpD71zT3t3BYbtp8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/how-to-ship-wine-FT-BLOG1221-073f4b1897c34f04bff8ea71dadcba2c.jpg" },
+            new Packet { Name = "Warme Maaltijden", City = CityEnum.Tilburg, /*Products=drankList, */Canteen = CanteenEnum.LD, DateTime = DateTime.Now, Price = 14.99m, Type = TypeEnum.WarmeMaaltijd, ReservedById = null, ImageUrl = "https://www.framedcooks.com/wp-content/uploads/2021/07/steamed-cheeseburgers.jpg" }
 
         };
 
@@ -113,8 +116,8 @@ namespace Infrastructure {
             DemoProducts[] demoProducts = {
 
                     new DemoProducts() {Products = new List<Product>(){ products[0], products[1], products[2]}, Type = TypeEnum.Broodpakket},
-                    new DemoProducts() {Products = new List<Product>(){ products[4], products[5], products[6]}, Type = TypeEnum.Drankpakket},
-                    new DemoProducts() {Products = new List<Product>(){ products[9], products[10], products[11] }, Type = TypeEnum.WarmeMaaltijd},
+                    new DemoProducts() {Products = new List<Product>(){ products[4], products[5], products[6]}, Type = TypeEnum.WarmeMaaltijd},
+                    new DemoProducts() {Products = new List<Product>(){ products[9], products[10], products[11] }, Type = TypeEnum.Drankpakket},
 
             };
 
@@ -166,7 +169,15 @@ namespace Infrastructure {
         }
 
 
+        public async Task ClearData() {
+            _dbContext.Database.ExecuteSqlRaw("DELETE FROM Packets");
+            _dbContext.Database.ExecuteSqlRaw("DELETE FROM Products");
+            _dbContext.Database.ExecuteSqlRaw("DELETE FROM Students");
+            _dbContext.Database.ExecuteSqlRaw("DELETE FROM Employees");
+            _dbContext.Database.ExecuteSqlRaw("DELETE FROM Canteens");
+            _dbContext.Database.ExecuteSqlRaw("DELETE FROM DemoProducts");
+            await _dbContext.SaveChangesAsync();
+        }
+
     }
-
-
 }

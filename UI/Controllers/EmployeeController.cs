@@ -54,6 +54,8 @@ namespace UI.Controllers {
 		[Authorize(Policy = "Employee")]
 		public IActionResult CreatePacket() {
 			var canteen = _canteenRepository.GetCanteenById(GetCanteenID());
+
+
 			if (canteen.OffersHotMeals == true) {
 				ViewData["WarmMeals"] = true;
 			}
@@ -65,11 +67,15 @@ namespace UI.Controllers {
 
 		[Authorize(Policy = "Employee")]
 		[HttpPost]
-		public async Task<IActionResult> CreatePacket(string name, decimal price, DateTime pickupTime, string products, TypeEnum type, string imageUrl) {
+		public async Task<IActionResult> CreatePacket(string name, string price, DateTime pickupTime, string products, TypeEnum type, string imageUrl) {
 
 
+			//todo move this to repository
+
+			string testprice = price;
 			var canteenLocation = _canteenRepository.GetCanteenById(GetCanteenID()).Location;
-			var canteenCity = _canteenRepository.GetCanteenById(GetCanteenID()).City;
+			var canteen2 = _canteenRepository.GetCanteenById(GetCanteenID());
+
 
 			List<Product> productObjects;
 			if (!products.IsNullOrEmpty()) {
@@ -78,7 +84,7 @@ namespace UI.Controllers {
 			else {
 				productObjects = new List<Product>();
 			}
-			Packet packet = new Packet(name, pickupTime, productObjects, price, type, imageUrl);
+			Packet packet = new Packet(name, pickupTime, productObjects, canteen2,  (decimal) price, type, imageUrl);
 
 			if (!ModelState.IsValid) {
 				var canteen = _canteenRepository.GetCanteenById(GetCanteenID());
