@@ -27,6 +27,9 @@
 			
 		}
 
+		demo_product_header {
+		}
+		
 		.card-header {
 			background-color: lightgray;
 		}
@@ -57,11 +60,14 @@
 				</div>
 			</div>
 			<p style="margin-top:10px">Mogelijke producten:</p>
+			
+			
+			@* DEMOPRODUCTS *@
 			<div class="product_images d-flex flex-wrap">
 				@foreach (var item in Model.Item2) {
-					<div class="card border-primary mb-3 mr-3" style="max-width: 10rem; margin:2px">
-						<div class="card-header">@item.Name</div>
-						<div class="card-body">
+					<div class="card demo_product_card border-primary mb-3 mr-3" style="max-width: 10rem; margin:2px">
+						<div class="card-header demo_product_header">@item.Name</div>
+						<div class="card-body demo_product_body">
 							<img src="@item.ImageUrl" alt="Packet Image" class="img-fluid" />
 						</div>
 						<div class="card-footer">
@@ -70,6 +76,9 @@
 					</div>
 				}
 			</div>
+
+
+			@* RESERVE BUTTON *@
 			@if ((bool)ViewData["CanEdit"]) {
 				<div class="button-container">
 					<form asp-controller="Employee" asp-action="DeletePacket" method="post">

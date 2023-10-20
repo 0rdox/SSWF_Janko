@@ -100,8 +100,8 @@ a:hover {
 }
 
 a {
-    text-decoration: none;
-    color: inherit;
+    text-decoration: none !important;
+    color: inherit !important;
 }
 
 
@@ -220,24 +220,41 @@ hr {
     border-radius: 10px;
 }
 
-.reserve-button {
-    margin-top: 20px;
-    background-color: #007bff;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    border-radius:5px;
-}
+
 
 
 /*BUTTONS*/
 .btn-primary {
-    background-color: #28543c !important;
+    background-color: #26523f !important;
     color: white !important;
     border-radius: 5px;
+    font-weight: 600 !important;
+}
+.below_buttons {
+    text-align: center !important;
+}
+.btn-danger {
+    border-radius: 5px;
+    font-weight: 600 !important;
 }
 
-.btn-danger {
-    border-radius:5px;
+.btn-success {
+   /*background-color: #26523f !important;*/
+    font-weight: 600 !important;
+}
+
+
+.reserve-form {
+    text-align: center; /* Center align the contents of the form */
+}
+
+.reserve-button {
+    margin-top: 20px;
+    background-color: #26523f !important;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: 600;
 }

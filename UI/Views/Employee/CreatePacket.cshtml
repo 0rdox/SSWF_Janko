@@ -13,10 +13,13 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 	<style>
 		.container {
-			border: solid 3px;
+		
 			padding: 10px;
 			margin-top: 10px;
 			margin-bottom: 60px;
+			border-radius: 15px;
+			border: 4px solid #48a37c;
+			background-color: #a8dcc4;
 		}
 
 		/* Style product items to be displayed inline */
@@ -37,8 +40,26 @@
 			margin-right: 20px;
 		}
 
+
+
 		.form-check-input {
 			margin-left: 10px;
+		}
+
+		.modal-header {
+			background-color: #62d2a2 !important;
+		}
+
+		.modal-content {
+			border: 2px solid #48a37c !important;
+		}
+
+		.title{
+			font-weight:600;
+		}
+
+		.form-group {
+			margin-top:10px;
 		}
 
 	</style>
@@ -47,7 +68,7 @@
 <body>
 	<div class="container">
 
-		<h1>Create Packet</h1>
+		<h1 class="title">Pakket Samenstellen</h1>
 
 		<form id="myform" method="post" action="/Employee/CreatePacket">
 			<div asp-validation-summary="All" class="text-danger"></div>
@@ -57,57 +78,59 @@
 				<div class="row">
 					<div class="col-md-9">
 						<label asp-for="Name">Naam:</label>
-						<input asp-for="Name"type="text" class="form-control" id="Name" name="name">
+						<input asp-for="Name" type="text" class="form-control" id="Name" name="name">
 						<span asp-validation-for="Name" class="text-danger"></span>
 					</div>
 					<div class="col-md-3">
 						<label for="Price">Prijs:</label>
-						<input type="text" step="0.01" min="0.01"  class="form-control" id="Price" name="price">
+						<input type="text" step="0.01" min="0.01" class="form-control" id="Price" name="price">
 						<span asp-validation-for="Price" class="text-danger"></span>
 					</div>
 				</div>
 			</div>
 
 			<div class="form-group">
-				<label asp-for="Type">Type pakket:</label>
-				<select asp-for="Type"  class="form-control" id="Type" name="Type">
-					<option value="Unknown">Kies een waarde:</option>
-					<option value="Broodpakket">Broodpakket</option>
-					<option value="Drankpakket">Drankpakket</option>
-					@if ((bool)ViewData["WarmMeals"]) {
-						<option value="WarmeMaaltijd">Warme Maaltijd</option>
-					}
-				</select>
-				@*     <span asp-validation-for="Type" class="text-danger"></span> *@
-			</div>
+				<div class="row">
+					<div class="col-md-6">
+						<label asp-for="Type">Type pakket:</label>
+						<select asp-for="Type" class="form-control" id="Type" name="Type">
+							<option value="Unknown">Kies een waarde:</option>
+							<option value="Broodpakket">Broodpakket</option>
+							<option value="Drankpakket">Drankpakket</option>
+							@if ((bool)ViewData["WarmMeals"]) {
+								<option value="WarmeMaaltijd">Warme Maaltijd</option>
+							}
+						</select>
+						@*     <span asp-validation-for="Type" class="text-danger"></span> *@
+					</div>
 
-			<div class="form-group">
-				<label asp-for="DateTime">Ophaaltijd:</label>
-				<input asp-for="DateTime" type="datetime-local" class="form-control" id="DateTime" name="pickupTime" id="pickupTime">
-				<span asp-validation-for="DateTime" class="text-danger"></span>
-			</div>
+					<div class="col-md-6">
+						<label asp-for="DateTime">Ophaaltijd:</label>
+						<input asp-for="DateTime" type="datetime-local" class="form-control" id="DateTime" name="pickupTime" id="pickupTime">
+						<span asp-validation-for="DateTime" class="text-danger"></span>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label asp-for="ImageUrl">Afbeelding URL:</label>
+					<input asp-for="ImageUrl" type="url" class="form-control" id="ImageUrl" name="imageUrl">
+					<span asp-validation-for="ImageUrl" class="text-danger"></span>
+				</div>
+
+				<button type="button" class="btn btn-success" id="addProduct">Product Toevoegen</button>
+
+				<!-- List of products -->
+				<div class="form-group" id="productslist">
+					<!-- Product information will be displayed here -->
+				</div>
 
 
-			<div class="form-group">
-				<label asp-for="ImageUrl">Afbeelding URL:</label>
-				<input asp-for="ImageUrl" type="url" class="form-control" id="ImageUrl" name="imageUrl">
-				<span asp-validation-for="ImageUrl" class="text-danger"></span>
-			</div>
-
-			<button type="button" class="btn btn-success" id="addProduct">Add Product</button>
-
-			<!-- List of products -->
-			<div class="form-group" id="productslist">
-				<!-- Product information will be displayed here -->
-			</div>
-
-
-			<!--hidden input element for products-->
-			<input type="hidden" name="products" id="products">
-			<div class="below_buttons">
-				<button type="submit" class="btn btn-primary" id="submitButton">Sla Op</button>
-				<button type="button" class="btn btn-danger" id="cancelButton">Annuleren</button>
-			</div>
+				<!--hidden input element for products-->
+				<input type="hidden" name="products" id="products">
+				<div class="below_buttons">
+					<button type="submit" class="btn btn-primary" id="submitButton">Sla Op</button>
+					<button type="button" class="btn btn-danger" id="cancelButton">Annuleren</button>
+				</div>
 
 		</form>
 	</div>
@@ -118,13 +141,11 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="productModalLabel">Add Product</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
+
 				</div>
 				<div class="modal-body">
 					<div class="form-group">
-						<label for="ProductName">Product Name:</label>
+						<label for="ProductName">Product Naam:</label>
 						<input type="text" class="form-control" id="ProductName" name="ProductName">
 
 					</div>
@@ -133,13 +154,13 @@
 						<input type="checkbox" class="form-check-input" id="ProductAlcohol" name="ProductAlcohol">
 					</div>
 					<div class="form-group">
-						<label for="ProductImageUrl">Product Image URL:</label>
+						<label for="ProductImageUrl">Product Afbeelding URL:</label>
 						<input type="url" class="form-control" id="ProductImageUrl" name="ProductImageUrl">
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" id="closeProduct">Close</button>
-					<button type="button" class="btn btn-primary" id="saveProduct">Save Product</button>
+					<button type="button" class="btn btn-danger" id="closeProduct">Annuleren</button>
+					<button type="button" class="btn btn-primary" id="saveProduct">Sla Product Op</button>
 				</div>
 			</div>
 		</div>
@@ -222,7 +243,7 @@
 				deleteButton.data("index", i); // Store the index of the product in the button's data
 
 				var productItem = $("<div class='product-item'></div>");
-				var productName = $("<div class='ProductLabel'>Product Name: " + product.Name + "</div>");
+				var productName = $("<div class='ProductLabel' >" + product.Name + "</div>");
 				var productAlcohol = $("<div class='ProductLabel'>Alcohol: " + (product.Alcohol ? "Yes" : "No") + "</div>");
 				var productImage = $("<img src='" + product.ImageUrl + "' alt='Product Image'>");
 
