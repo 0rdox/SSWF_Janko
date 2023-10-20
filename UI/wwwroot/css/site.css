@@ -1,4 +1,4 @@
-html {
+﻿html {
     font-size: 14px;
 }
 
@@ -257,4 +257,43 @@ hr {
     cursor: pointer;
     border-radius: 5px;
     font-weight: 600;
+}
+
+.btn-login {
+    background-color: #26523f !important;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+font-weight:600;
+}
+
+/*FOCUS*/
+/*:focus {
+    outline: 5px solid red;*/ /* Change the color and width of the focus outline */
+/*}*/
+
+
+/*testing*/
+/* Change the focus indicator for the element */
+:focus {
+    position: relative;
+   
+}
+
+    /* Create a custom focus outline using ::before */
+:focus::before {
+        content: "\2191"; /* Unicode arrow character (→) */
+        position: absolute;
+        left:40%;
+        top:100%;
+        font-size: 24px;
+        color: red;
+    }
+
+/* Customize the focus outline for better visibility */
+:focus {
+    outline: 2px solid transparent; /* Remove the default outline */
+    outline-offset: 4px;
+    border: 2px solid red;
 }
