@@ -55,16 +55,14 @@
 				<div class="packet-name">
 					@Model.Item1.Name (€@Model.Item1.Price)
 					@if (Model.Item1.OverEighteen) {
-						<p class="subtext">This package is 18+</p>
+						<p class="subtext">Dit pakket is 18+</p>
 					}
 				</div>
 				<div class="other-info-box">
-
-					<p>Kantine: @Model.Item1.City - @Model.Item1.Canteen</p>
-					<p>Type pakket: @Model.Item1.Type</p>
-					<p>Ophaaltijd: @Model.Item1.DateTime</p>
-					<p>Maximale ophaaltijd: @Model.Item1.MaxDateTime</p>
-
+					Kantine: @Model.Item1.City - @Model.Item1.Canteen<br>
+					Type pakket: @Model.Item1.Type<br>
+					Ophaaltijd: @Model.Item1.DateTime<br>
+					Maximale ophaaltijd: @Model.Item1.MaxDateTime
 				</div>
 
 			</div>
@@ -100,7 +98,7 @@
 				</form>
 			}
 			else {
-				<div style="color:red">Dit pakket is 18+, u kunt dit niet reserveren</div>
+				<div style="color:red; text-align:center">Dit pakket is 18+, u kunt dit niet reserveren</div>
 			}
 
 

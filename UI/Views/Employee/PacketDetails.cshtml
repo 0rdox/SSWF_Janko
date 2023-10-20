@@ -22,21 +22,39 @@
 		}
 
 
-		/* Style for individual buttons */
-		button {
-			
+		.card {
+			position: relative; /* Set the position property to relative */
+			border: 2.5px solid black !important;
+			overflow: hidden !important; /* Hide any content that overflows */
+			margin: 2px;
+			display: flex;
+			height: 20vh; /* Set the maximum height */
+			width: 9vw; /* Set the maximum width */
+			overflow: hidden; /* Hide any content that overflows */
 		}
 
-		demo_product_header {
-		}
-		
 		.card-header {
-			background-color: lightgray;
+			/* 			background-color: lightgray; */
 		}
 
 		.card-footer {
-			background-color: lightgray;
+			/* background-color: lightgray; */
 		}
+
+		.card-body {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			position: relative; /* Set the position property to relative */
+		}
+
+		.card-image {
+			position: absolute; /* Set the position property to absolute */
+			object-fit: contain;
+			max-width: 100%;
+			max-height: 100%;
+		}
+
 
 	</style>
 </head>
@@ -63,20 +81,22 @@
 			
 			
 			@* DEMOPRODUCTS *@
+			<p style="margin-top:10px">Mogelijke producten:</p>
 			<div class="product_images d-flex flex-wrap">
 				@foreach (var item in Model.Item2) {
-					<div class="card demo_product_card border-primary mb-3 mr-3" style="max-width: 10rem; margin:2px">
-						<div class="card-header demo_product_header">@item.Name</div>
-						<div class="card-body demo_product_body">
-							<img src="@item.ImageUrl" alt="Packet Image" class="img-fluid" />
+
+					<div class="card border-primary mb-3 mr-3">
+						<div class="card-header demo_product_header ">@item.Name</div>
+						<div class="card-body">
+							<img src="@item.ImageUrl" alt="Packet Image" class="img-fluid card-image" />
 						</div>
 						<div class="card-footer">
 							<p class="card-text"></p>
 						</div>
 					</div>
+
 				}
 			</div>
-
 
 			@* RESERVE BUTTON *@
 			@if ((bool)ViewData["CanEdit"]) {
