@@ -1,24 +1,209 @@
 html {
     font-size: 14px;
-  
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
     margin-bottom: 60px;
     font-family: 'Nunito', sans-serif !important;
+    background-color: #d8e4d4 !important;
+}
+
+
+
+
+
+/*-----------------LAYOUT CSS-----------------*/
+.logo_image {
+    width: 80px !important;
+    height: 80px !important;
+    margin: 10px !important;
+}
+
+.custom-header, .container-fluid, .navbar-brand, .navbar {
+    background-color: #62d2a2 !important;
+    color: black !important;
+    padding: 2.5px !important;
+    font-size: 50px !important;
+    font-weight: 700 !important;
+}
+
+.custom-header {
+    border-bottom: 4px solid #48a37c !important;
+}
+
+.header-logo {
+    font-size: 24px !important;
+    font-weight: bold !important;
+}
+
+.header-icons {
+    padding: 10px !important;
+    font-size: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+i {
+    color: black !important;
+}
+.footer {
+    background-color: #62d2a2 !important;
+    color: white !important;
+    padding-left: 0px !important;
+    font-size: 20px !important;
+    border-top: 4px solid #48a37c !important;
+}
+
+
+
+
+.footertext {
+    padding-left: 10px !important;
+    color: black !important;
+}
+
+/*ICONS*/
+i:hover {
+    text-decoration: none;
+    color: inherit;
+    color: white;
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+    transition: box-shadow 0.2s; /* Add a smooth transition effect */
+}
+
+i {
+    color: white;
+}
+
+
+
+
+/*-----------------------------CARDS-----------------------------*/
+a:hover {
+    text-decoration: none;
+    color: inherit;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+
+
+.custom-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4); /* Adjust the shadow as needed */
+    transition: box-shadow 0.2s; /* Add a smooth transition effect */
+    transition: transform 0.2s;
+}
+
+.custom-card {
+    border: 3.5px solid #48a37c;
+    border-radius: 10px; /* Replace #007BFF with the appropriate color code for your "primary" color */
+    margin-bottom: 1rem; /* Equivalent to Bootstrap's mb-3 */
+    margin-right: 1rem;
+    overflow: hidden;
+    max-width: 21rem;
+    position: relative;
+}
+
+.price-container {
+    background-color: white;
+    border: 1px solid #ccc; /* Add borders as per your requirements */
+    border-radius: 10px; /* Optional: Add rounded corners */
+    padding: 5px;
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+}
+
+
+.card-header {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 20px;
+    background-color: #62d2a2;
+}
+
+.card-body {
+    background-color:white;
+}
+
+.card-footer {
+    background-color: #62d2a2;
+}
+
+
+
+
+
+
+
+/*PACKET DETAILS*/
+.packet-container {
+    display: flex;
+    align-items: center;
+    margin: 20px;
+    margin-bottom: 60px;
+}
+
+.packet-image {
+    width: 500px;
+    height: 500px;
+    margin: 50px;
+    border: 1px solid green;
+    object-fit: cover;
+}
+
+
+
+
+.packet-info-container {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.subtext {
+    font-size: 14px;
+    color: red;
+}
+
+.packet-name {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.other-info-box {
+    margin: 10px;
+    font-size: 14px;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+.reserve-button {
+    margin-top: 20px;
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
 }

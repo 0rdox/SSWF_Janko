@@ -24,6 +24,8 @@ namespace UI.Controllers {
         //ALL PACKETS
         [Authorize(Policy = "Student")]
         public IActionResult Packets() {
+
+            //move to repo
             var packets = _packetRepository.GetPackets()
                 .Where(a => a.ReservedById == null)
                  .OrderBy(c => c.DateTime);
@@ -76,6 +78,8 @@ namespace UI.Controllers {
             var studentId = GetStudentID();
 
 
+
+            //move to repo
             var packets = _packetRepository.GetPackets()
                 .Where(a => a.ReservedById == studentId)
                 .OrderBy(c => c.DateTime);

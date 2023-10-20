@@ -15,53 +15,14 @@
 
     body {
         margin-bottom: 60px;
+        text-decoration:none;
     }
 
-    .price-container {
-        background-color: white;
-        border: 1px solid #ccc; /* Add borders as per your requirements */
-        border-radius: 10px; /* Optional: Add rounded corners */
-        padding: 5px;
-        position: absolute;
-        right: 8px;
-        bottom: 8px;
-    }
+    
 
-    .custom-card {
 
-        border: 2px solid #26523f;
-        border-radius: 10px; /* Replace #007BFF with the appropriate color code for your "primary" color */
-        margin-bottom: 1rem; /* Equivalent to Bootstrap's mb-3 */
-        margin-right: 1rem;
-        overflow: hidden;
-        max-width: 21rem;
-        position: relative;
-    }
 
-    .card-header {
-
-        border-top-left-radius: 20px;
-        border-top-right-radius: 20px;
-        text-align: center;
-        font-weight: bold;
-        border-radius: 20px;
-        background-color: #62d2a2;
-        /* font-family: 'Nunito', sans-serif; */
-    }
-
-    .custom-card:hover {
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.4); /* Adjust the shadow as needed */
-        transition: box-shadow 0.2s; /* Add a smooth transition effect */
-    }
-
-    a:hover {
-        text-decoration: none;
-        color: inherit;
-    }
-
-    a {
-        color: inherit;
-    }
+  
 </style>
 
 
@@ -76,7 +37,7 @@
                     </div>
 
                 </div>
-                <div class="card-footer" style="background-color: #62d2a2;">
+                <div class="card-footer" >
                     <p class="card-text">@item.Type</p>
                     <p class="card-text">@item.City - @item.Canteen</p>
                     <p class="card-text">@item.DateTime.ToString("dd MMMM, HH:mm", dutch)</p>

@@ -57,7 +57,6 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(conf => {
 	conf.Password.RequiredLength = 4;
 	conf.Password.RequireDigit = false;
 	conf.Password.RequireNonAlphanumeric = false;
-
 	// conf.SignIn.RequireConfirmedEmail = true;
 })
 	.AddEntityFrameworkStores<AppIdentityDBContext>()
@@ -66,7 +65,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(conf => {
 
 builder.Services.AddAuthentication("CookieAuth")
 	.AddCookie(conf => {
-		conf.Cookie.Name = "Cookie";
+		conf.Cookie.Name = "IdentityCookie";
 		//  conf.AccessDeniedPath = "/home/AccessDenied";
 		conf.LoginPath = "/Account/Login";
 	});
@@ -93,6 +92,8 @@ builder.Services.AddAuthorization(policyBuilder => {
 //todo: check how when creating a packet the correct city and canteen get added
 //todo: remove reserve button when reserved is true
 //todo: logo, images
+
+//todo: remove bg from homescreen image
 
 var app = builder.Build();
 
@@ -136,21 +137,31 @@ app.MapControllerRoute(
 app.UseSession();
 
 
-//ASSIGN ROLES
+//ASSIGN ROLES + SEED DATABASE
 using var scope = app.Services.CreateScope();
 var roleAssigner = scope.ServiceProvider.GetRequiredService<RoleAssigner>();
+var dataSeeder = scope.ServiceProvider.GetService<SeedData>();
+//Assign roles
 await roleAssigner.AssignRolesToStudentsAndEmployees();
+//Seed database
+dataSeeder?.SeedDatabase();
+//	dataSeeder?.AddAdditionalPackets();
 
-//Seed date for PacketContext and SecurityContext
-using (var roleScope = app.Services.CreateScope()) {
-	var service = roleScope.ServiceProvider;
-	var dataSeeder = service.GetService<SeedData>();
-	dataSeeder?.SeedDatabase();
-}
 
-using var scope3 = app.Services.CreateScope();
-var dataseeder2 = scope.ServiceProvider.GetRequiredService<SeedData>();
-await dataseeder2.AddAdditionalPackets();
+
+
+
+////Seed date for PacketContext and SecurityContext
+//using (var roleScope = app.Services.CreateScope()) {
+//	var service = roleScope.ServiceProvider;
+//	var dataSeeder = service.GetService<SeedData>();
+//	dataSeeder?.SeedDatabase();
+////	dataSeeder?.AddAdditionalPackets();
+//}
+
+
+
+
 
 app.Run();
 

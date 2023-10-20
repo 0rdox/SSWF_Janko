@@ -73,6 +73,7 @@ namespace UI.Controllers {
 			//todo move this to repository
 
 			string testprice = price;
+			decimal priceD = decimal.Parse(testprice);
 			var canteenLocation = _canteenRepository.GetCanteenById(GetCanteenID()).Location;
 			var canteen2 = _canteenRepository.GetCanteenById(GetCanteenID());
 
@@ -84,7 +85,7 @@ namespace UI.Controllers {
 			else {
 				productObjects = new List<Product>();
 			}
-			Packet packet = new Packet(name, pickupTime, productObjects, canteen2,  (decimal) price, type, imageUrl);
+			Packet packet = new Packet(name, pickupTime, productObjects, canteen2, priceD, type, imageUrl);
 
 			if (!ModelState.IsValid) {
 				var canteen = _canteenRepository.GetCanteenById(GetCanteenID());
@@ -171,12 +172,16 @@ namespace UI.Controllers {
 		public IActionResult Packets() {
 			var canteen = _canteenRepository.GetCanteenById(GetCanteenID());
 
+
+			//make _packetRepository.GetMyPackets()
 			var packetsOurs = _packetRepository.GetPackets()
 				.Where(a => a.ReservedById == null)
 				.Where(b => b.CanteenNavigation == canteen)
 				  .OrderBy(c => c.DateTime);
 
-			var packetsOthers = _packetRepository.GetPackets()
+
+            //make _packetRepository.GetOtherPackets()
+            var packetsOthers = _packetRepository.GetPackets()
 				.Where(a => a.ReservedById == null)
 				.Where(b => b.CanteenNavigation != canteen)
 				.OrderBy(c => c.DateTime);
