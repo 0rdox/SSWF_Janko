@@ -7,7 +7,11 @@ using Domain.Models;
 using Domain.Models.Enums;
 using Domain.Services;
 using Infrastructure.Data;
+using Infrastructure.Migrations.AppDB;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 
 namespace Infrastructure.Repositories {
     public class PacketRepository : IPacketRepository {
@@ -17,10 +21,7 @@ namespace Infrastructure.Repositories {
             _context = context;
         }
 
-        public async Task CreatePacket(Packet packet) {
-            _context.Packets.Add(packet);
-            await _context.SaveChangesAsync();
-        }
+
 
         public IEnumerable<Packet> GetPackets() => _context.Packets;
 
@@ -45,7 +46,8 @@ namespace Infrastructure.Repositories {
 
                 if (existingReservation != null) {
                     //handle exception
-                } else {
+                }
+                else {
                     packet.ReservedBy = student;
                     await _context.SaveChangesAsync();
                 }
@@ -98,22 +100,85 @@ namespace Infrastructure.Repositories {
             }
         }
 
-        public async Task UpdatePacket(int packetId, Packet updatedPacket) {
-            // Implement the logic to update the packet
 
-            var existingPacket = _context.Packets.FirstOrDefault(p => p.Id == packetId);
-            if (existingPacket != null) {
-                // Update the properties of the existing packet with the properties of the updatedPacket
-                existingPacket.Name = updatedPacket.Name;
-                existingPacket.Price = updatedPacket.Price;
-                existingPacket.Type = updatedPacket.Type;
-                existingPacket.DateTime = updatedPacket.DateTime;
-                existingPacket.ImageUrl = updatedPacket.ImageUrl;
 
-                await _context.SaveChangesAsync(); // Save changes to the
-            }
-            // You should also handle database updates if you're using a database
+        public IEnumerable<Packet> GetMyCanteenPackets(Canteen canteen) {
+            //make _packetRepository.GetMyPackets()
+            var packetsOurs = _context.Packets
+            .Where(a => a.ReservedById == null)
+                .Where(b => b.CanteenNavigation == canteen)
+                  .OrderBy(c => c.DateTime);
+
+            return packetsOurs;
+
+
         }
 
+        public IEnumerable<Packet> GetOtherCanteenPackets(Canteen canteen) {
+
+            //make _packetRepository.GetOtherPackets()
+            var packetsOthers = _context.Packets
+            .Where(a => a.ReservedById == null)
+                .Where(b => b.CanteenNavigation != canteen)
+                .OrderBy(c => c.DateTime);
+
+
+
+            return packetsOthers;
+        }
+
+        public async Task CreatePacket(string name, string price, DateTime pickupTime, string products, TypeEnum type, string imageUrl, Canteen canteen) {
+
+            if (price.Contains('.')) {
+                price = price.Replace('.', ',');
+            }
+
+
+
+            List<Product> productObjects;
+            if (!products.IsNullOrEmpty()) {
+                productObjects = JsonConvert.DeserializeObject<List<Product>>(products);
+            }
+            else {
+                productObjects = new List<Product>();
+            }
+            Packet packet = new Packet(name, pickupTime, productObjects, canteen, Decimal.Parse(price), type, imageUrl);
+
+            _context.Packets.Add(packet);
+            await _context.SaveChangesAsync();
+
+        }
+
+ 
+        public async Task UpdatePacket(int packetId, string name, string price, DateTime pickupTime, string products, TypeEnum type, string imageUrl) {
+
+
+            //Get packet before edit
+            var existingPacket = _context.Packets.Include(p => p.Products).FirstOrDefault(p => p.Id == packetId);
+
+
+            //fix price
+            if (price.Contains('.')) {
+                price = price.Replace('.', ',');
+            }
+
+
+
+            existingPacket.Name = name;
+            existingPacket.Price = Decimal.Parse(price);
+            existingPacket.DateTime = pickupTime;
+            //Products
+            if (products != null) {
+                List<Product> productObjects = JsonConvert.DeserializeObject<List<Product>>(products);
+                existingPacket.Products = productObjects;
+            }
+            //--
+            existingPacket.Type = type;
+            existingPacket.ImageUrl = imageUrl;
+
+        
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

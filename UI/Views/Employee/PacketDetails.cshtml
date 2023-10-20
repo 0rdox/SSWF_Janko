@@ -1,99 +1,92 @@
 ﻿@model (Domain.Models.Packet, IEnumerable<Domain.Models.Product>)
 @{
-    Layout = "_LayoutEmployee";
+	Layout = "_LayoutEmployee";
 }
-
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Packet Details</title>
-    <style>
-     
-        /* Add this to your existing CSS or your external CSS file */
-        .button-container {
-            display: flex; /* Display buttons in a row */
-            gap: 10px; /* Add some space between the buttons */
-        }
-
-        /* Style for individual buttons */
-        button {
-            /* Your button styles here */
-            padding: 10px 20px;
-        }
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Packet Details</title>
+	<style>
+		/* Add this to your existing CSS or your external CSS file */
+		.button-container {
+			display: flex; /* Display buttons in a row */
+			flex-direction: row; /* Stack buttons vertically */
+			align-items: center; /* Center the buttons horizontally */
+			justify-content: center; /* Align buttons to the bottom of the container */
+			gap: 10px; /* Add some space between the buttons */
+			position:relative;
+			/* height: 50%; */
+		}
 
 
+		/* Style for individual buttons */
+		button {
+			
+		}
 
-        .card-header {
-            background-color: lightgray;
-        }
+		.card-header {
+			background-color: lightgray;
+		}
 
-        .card-footer {
-            background-color: lightgray;
-        }
+		.card-footer {
+			background-color: lightgray;
+		}
 
-
-
-    </style>
+	</style>
 </head>
 <body>
-    <div class="packet-container">
-        <div class="packet-info-container">
-            <div class="packet-info">
-                <div class="packet-name">
-                    @Model.Item1.Name (€@Model.Item1.Price)
-                    @if (Model.Item1.OverEighteen) {
-                        <p class="subtext">This package is 18+</p>
-                    }
-                </div>
-                <div class="other-info-box">
-
-                    <p>Kantine: @Model.Item1.City - @Model.Item1.Canteen</p>
-                    <p>Type pakket: @Model.Item1.Type</p>
-                    <p>Ophaaltijd: @Model.Item1.DateTime</p>
-                    <p>Maximale ophaaltijd: @Model.Item1.MaxDateTime</p>
-
-                </div>
-
-            </div>
 
 
+	<div class="packet-container">
+		<div class="packet-info-container">
+			<div class="packet-info">
+				<div class="packet-name">
+					@Model.Item1.Name (€@Model.Item1.Price)
+					@if (Model.Item1.OverEighteen) {
+						<p class="subtext">This package is 18+</p>
+					}
+				</div>
+				<div class="other-info-box">
+					Kantine: @Model.Item1.City - @Model.Item1.Canteen<br>
+					Type pakket: @Model.Item1.Type<br>
+					Ophaaltijd: @Model.Item1.DateTime<br>
+					Maximale ophaaltijd: @Model.Item1.MaxDateTime
+				</div>
+			</div>
+			<p style="margin-top:10px">Mogelijke producten:</p>
+			<div class="product_images d-flex flex-wrap">
+				@foreach (var item in Model.Item2) {
+					<div class="card border-primary mb-3 mr-3" style="max-width: 10rem; margin:2px">
+						<div class="card-header">@item.Name</div>
+						<div class="card-body">
+							<img src="@item.ImageUrl" alt="Packet Image" class="img-fluid" />
+						</div>
+						<div class="card-footer">
+							<p class="card-text"></p>
+						</div>
+					</div>
+				}
+			</div>
+			@if ((bool)ViewData["CanEdit"]) {
+				<div class="button-container">
+					<form asp-controller="Employee" asp-action="DeletePacket" method="post">
+						<input type="hidden" name="id" value="@Model.Item1.Id" />
+						<button type="submit" class="btn btn-danger delete-product-button">Verwijder pakket</button>
+					</form>
+					<a asp-controller="Employee" asp-action="EditPacket" asp-route-id="@Model.Item1.Id" class="btn btn-primary">Pas pakket aan</a>
+				</div>
+			}
+		</div>
+		<div class="">
+			<img src="@Model.Item1.ImageUrl" alt="Packet Image" class="packet-image">
 
-            <p style="margin-top:10px">Mogelijke producten:</p>
-            <div class="product_images d-flex flex-wrap">
-                @foreach (var item in Model.Item2) {
-                    <div class="card border-primary mb-3 mr-3" style="max-width: 10rem; margin:2px">
-                        <div class="card-header">@item.Name</div>
-                        <div class="card-body">
-                            <img src="@item.ImageUrl" alt="Packet Image" class="img-fluid" />
-                        </div>
-                        <div class="card-footer">
-                            <p class="card-text"></p>
-                        </div>
-                    </div>
-                }
-            </div>
+		</div>
 
-            @if ((bool)ViewData["CanEdit"]) {
-                <div class="button-container">
-                    <form asp-controller="Employee" asp-action="DeletePacket" method="post">
-                        <input type="hidden" name="id" value="@Model.Item1.Id" />
-                        <button type="submit" class="btn btn-danger delete-product-button">Verwijder pakket</button>
-                    </form>
-                
-                    <a asp-controller="Employee" asp-action="EditPacket" asp-route-id="@Model.Item1.Id" class="btn btn-primary">Pas pakket aan</a>
+	</div>
 
-                </div>
-            }
-
-        </div>
-
-        <div class="">
-            <img src="@Model.Item1.ImageUrl" alt="Packet Image" class="packet-image">
-        </div>
-    </div>
 
 </body>
 </html>

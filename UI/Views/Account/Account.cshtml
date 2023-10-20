@@ -4,4 +4,26 @@
 
 
 
-<p>Click <a asp-controller="Account" asp-action="Logout">here</a> to logout</p>
+<style>
+    .center-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .logout-button {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+</style>
+
+<div class="center-container">
+    <form asp-controller="Account" asp-action="Logout" method="post">
+        <button type="submit" class="logout-button">Log Out</button>
+    </form>
+</div>

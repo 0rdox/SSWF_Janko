@@ -1,4 +1,5 @@
-﻿@model (IOrderedEnumerable<Domain.Models.Packet>, IOrderedEnumerable<Domain.Models.Packet>)
+﻿@model (IEnumerable<Domain.Models.Packet>, IEnumerable<Domain.Models.Packet>)
+
 
 @{
     Layout = "_LayoutEmployee";
@@ -24,7 +25,7 @@
     </style>
 </head>
 
-<h2>Jouw kantine</h2>
+<h2 class="koptekst">Jouw kantine</h2>
 <div class="d-flex flex-wrap" style="padding: 20px;">
     @foreach (var item in Model.Item1) {
         <a href="@Url.Action("PacketDetails", "Employee", new { id = item.Id })" class="custom-card" style="max-width: 21rem; position: relative;">
@@ -47,9 +48,11 @@
     }
 </div>
 
+@* Horizontal Line *@
+<hr />
 
 
-<h2>Andere kantine's</h2>
+<h2 class="koptekst">Andere kantine's</h2>
 <div class="d-flex flex-wrap" style="padding: 20px;">
     @foreach (var item in Model.Item2) {
         <a href="@Url.Action("PacketDetails", "Employee", new { id = item.Id })" class="custom-card" style="max-width: 21rem; position: relative;">

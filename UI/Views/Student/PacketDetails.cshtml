@@ -12,14 +12,6 @@
     <title>Packet Details</title>
     <style>
      
-        .reserve-button {
-            margin-top: 20px;
-            background-color: #007bff;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-        }
 
         .card-header {
             background-color: lightgray;
@@ -52,11 +44,10 @@
             </div>
 
 
-            <form method="post" asp-action="Reserve" asp-controller="Student">
+            <a method="post" asp-action="Reserve" asp-controller="Student">
                 <input type="hidden" name="packetId" value="@Model.Item1.Id" />
+            </a>
 
-
-            </form>
             <p style="margin-top:10px">Mogelijke producten:</p>
             <div class="product_images d-flex flex-wrap">
                 @foreach (var item in Model.Item2) {
@@ -77,9 +68,11 @@
                     <input type="hidden" name="packetId" value="@Model.Item1.Id">
                     <button class="reserve-button" type="submit">Reserveer</button>
                 </form>
-            } else {
-                <div>Pakket is 18+, u kunt dit niet reserveren</div>
             }
+            else {
+                <div style="color:red">Dit pakket is 18+, u kunt dit niet reserveren</div>
+            }
+         
 
         </div>
         <div class="">

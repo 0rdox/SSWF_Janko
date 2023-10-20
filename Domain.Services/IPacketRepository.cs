@@ -11,10 +11,17 @@ namespace Domain.Services {
 
         IEnumerable<Packet> GetPackets();
 
-        Task CreatePacket(Packet packet);
+        IEnumerable<Packet> GetMyCanteenPackets(Canteen canteen);
+        IEnumerable<Packet> GetOtherCanteenPackets(Canteen canteen);
+
+
+
+
+        Task CreatePacket(string name, string price, DateTime pickupTime, string products, TypeEnum type, string imageUrl, Canteen canteen);
 
         Task DeletePacket(Packet packet);
-        Task UpdatePacket(int packetId, Packet packet);
+        Task UpdatePacket(int packetId, string name, string price, DateTime pickupTime, string products, TypeEnum type, string imageUrl);
+
 
         Packet? GetPacketById(int id);
 

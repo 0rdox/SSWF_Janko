@@ -152,9 +152,17 @@ a {
 }
 
 
-
-
-
+/*others*/
+hr {
+    border: 2px solid black;
+}
+/*koptekst*/
+.koptekst {
+    font-size:40px;
+    font-weight:700;
+    margin-left:20px;
+    margin-top:20px;
+}
 
 
 /*PACKET DETAILS*/
@@ -163,23 +171,34 @@ a {
     align-items: center;
     margin: 20px;
     margin-bottom: 60px;
+   
 }
 
 .packet-image {
     width: 500px;
     height: 500px;
     margin: 50px;
-    border: 1px solid green;
+    border: 3px solid #48a37c;
     object-fit: cover;
+    border-radius: 10px;
 }
 
 
 
 
 .packet-info-container {
-    border: 1px solid #ccc;
     padding: 10px;
     border-radius: 5px;
+    border: 3.5px solid #48a37c;
+    background-color: #a8dcc4;
+    border-radius: 10px;
+    margin:10px;
+    color:black;
+    font-weight:600 !important;
+
+    min-height:500px;
+    height:auto;
+    width:auto;
 }
 
 .subtext {
@@ -196,7 +215,9 @@ a {
     margin: 10px;
     font-size: 14px;
     padding: 10px;
-    border: 1px solid #ccc;
+    background-color: #a7d9c3;
+    border: 1px solid #48a37c;
+    border-radius: 10px;
 }
 
 .reserve-button {
@@ -206,4 +227,17 @@ a {
     padding: 10px 20px;
     border: none;
     cursor: pointer;
+    border-radius:5px;
+}
+
+
+/*BUTTONS*/
+.btn-primary {
+    background-color: #28543c !important;
+    color: white !important;
+    border-radius: 5px;
+}
+
+.btn-danger {
+    border-radius:5px;
 }

@@ -85,19 +85,15 @@ builder.Services.AddAuthorization(policyBuilder => {
 //builder.Services.AddControllers().AddJsonOptions(options => {
 //    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
 //});
-//todo: site.css for things like hover, and font, fontsize, etc.
+
+
+
 //todo: access denied method
-//todo: edit products
 
-//todo: check how when creating a packet the correct city and canteen get added
-//todo: remove reserve button when reserved is true
-//todo: logo, images
 
-//todo: remove bg from homescreen image
 
 var app = builder.Build();
 
-//session
 
 
 
