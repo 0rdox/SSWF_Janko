@@ -6,6 +6,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<!-- Add this inside the <head> section of your HTML file -->
+@* 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> *@
+
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Packet Details</title>
@@ -17,10 +23,16 @@
 			align-items: center; /* Center the buttons horizontally */
 			justify-content: center; /* Align buttons to the bottom of the container */
 			gap: 10px; /* Add some space between the buttons */
-			position:relative;
+			position: relative;
 			/* height: 50%; */
 		}
 
+		.packet-container {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 60vh; /* Center vertically on the screen */
+		}
 
 		.card {
 			position: relative; /* Set the position property to relative */
@@ -55,6 +67,22 @@
 			max-height: 100%;
 		}
 
+		.card-header {
+			border-top-left-radius: 20px;
+			border-top-right-radius: 20px;
+			text-align: center;
+			font-weight: bold;
+			border-radius: 20px;
+			background-color: #62d2a2 !important;
+		}
+
+		.card-body {
+			background-color: white;
+		}
+
+		.card-footer {
+			background-color: #62d2a2 !important;
+		}
 
 	</style>
 </head>
@@ -66,10 +94,13 @@
 			<div class="packet-info">
 				<div class="packet-name">
 					@Model.Item1.Name (€@Model.Item1.Price)
+
 					@if (Model.Item1.OverEighteen) {
-						<p class="subtext">This package is 18+</p>
+						<p class="subtext">Dit pakket is 18+</p>
 					}
+
 				</div>
+
 				<div class="other-info-box">
 					Kantine: @Model.Item1.City - @Model.Item1.Canteen<br>
 					Type pakket: @Model.Item1.Type<br>
@@ -77,9 +108,9 @@
 					Maximale ophaaltijd: @Model.Item1.MaxDateTime
 				</div>
 			</div>
-			<p style="margin-top:10px">Mogelijke producten:</p>
-			
-			
+
+
+
 			@* DEMOPRODUCTS *@
 			<p style="margin-top:10px">Mogelijke producten:</p>
 			<div class="product_images d-flex flex-wrap">
@@ -103,7 +134,9 @@
 				<div class="button-container">
 					<form asp-controller="Employee" asp-action="DeletePacket" method="post">
 						<input type="hidden" name="id" value="@Model.Item1.Id" />
-						<button type="submit" class="btn btn-danger delete-product-button">Verwijder pakket</button>
+						@* <button type="submit" class="btn btn-danger delete-product-button">Verwijder pakket</button> *@
+						<button type="button" class="btn btn-danger delete-product-button" onclick="showDeleteConfirmation()">Verwijder pakket</button>
+
 					</form>
 					<a asp-controller="Employee" asp-action="EditPacket" asp-route-id="@Model.Item1.Id" class="btn btn-primary">Pas pakket aan</a>
 				</div>
@@ -117,5 +150,44 @@
 	</div>
 
 
+	<!-- Modal for Delete Confirmation -->
+	<div id="deleteConfirmationModal" class="modal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Pakket Verwijderen?</h5>
+				</div>
+				<div class="modal-body">
+					<p>Weet je zeker dat je het pakket wilt verwijderen?</p>
+				</div>
+				<div class="modal-footer">
+					<form asp-controller="Employee" asp-action="DeletePacket" method="post">
+						<input type="hidden" name="id" value="@Model.Item1.Id" />
+						<button type="submit" class="btn btn-danger delete-product-button">Verwijder Pakket</button>
+					</form>
+					<button type="button" class="btn btn-primary" id="closeDelete">Annuleren</button>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script>
+		// Function to show the confirmation modal
+		function showDeleteConfirmation() {
+			$('#deleteConfirmationModal').modal('show');
+		}
+
+		$("#closeDelete").click(function () {
+
+			$("#deleteConfirmationModal").modal("hide");
+		});
+	</script>
 </body>
+
+
 </html>
+
+

@@ -50,6 +50,8 @@
 			background-color: #62d2a2 !important;
 		}
 
+		
+
 		.modal-content {
 			border: 2px solid #48a37c !important;
 		}
@@ -140,7 +142,7 @@
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="productModalLabel">Add Product</h5>
+					<h5 class="modal-title" id="productModalLabel">Product Toevoegen</h5>
 
 				</div>
 				<div class="modal-body">
@@ -160,7 +162,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-danger" id="closeProduct">Annuleren</button>
-					<button type="button" class="btn btn-primary" id="saveProduct">Sla Product Op</button>
+					<button type="button" class="btn btn-primary" id="saveProduct">Product Toevoegen</button>
 				</div>
 			</div>
 		</div>
@@ -244,7 +246,7 @@
 
 				var productItem = $("<div class='product-item'></div>");
 				var productName = $("<div class='ProductLabel' >" + product.Name + "</div>");
-				var productAlcohol = $("<div class='ProductLabel'>Alcohol: " + (product.Alcohol ? "Yes" : "No") + "</div>");
+				var productAlcohol = $("<div class='ProductLabel'>" + (product.Alcohol ? "Bevat alcohol" : "") + "</div>");
 				var productImage = $("<img src='" + product.ImageUrl + "' alt='Product Image'>");
 
 

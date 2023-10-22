@@ -15,7 +15,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            height: 80vh;
         }
 
         .left {
@@ -70,9 +70,13 @@
 
         .btn-create-account {
             color: #007bff;
-            text-decoration: none;
+            text-decoration: underline !important;
            
         } 
+
+        .title {
+            font-weight:600;
+        }
     </style> 
 </head>
 <body>
@@ -83,21 +87,22 @@
         </div>
         <div class="right">
             <div class="login-form">
-                <h2>Login</h2>
+                <h2 class="title">Login</h2>
+                <hr />
                 <form method="post" action="@Url.Action("login", "Account")">
                     <div class="form-group">
                         <label for="email">Email:</label>
                         <input type="email" id="email" name="email" required>
                     </div>
                     <div class="form-group">
-                        <label for="password">Password:</label>
+                        <label for="password">Wachtwoord:</label>
                         <input type="password" id="password" name="password" required>
                     </div>
                     <button type="submit" class="btn-login">Login</button>
                 </form>
 
                 <P></P>
-                <p>______________________</p>
+                <hr />
 
                 <p>Heb je geen account? <a href="#" class="btn-create-account" tabindex="-1">Maak een account aan!</a></p>
             </div>

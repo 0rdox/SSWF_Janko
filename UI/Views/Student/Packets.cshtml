@@ -6,6 +6,7 @@
 
 }
 
+
 <style>
     img {
         width: 285px;
@@ -18,16 +19,34 @@
         text-decoration:none;
     }
 
-    
 
+    alert {
+        color:red;
+    }
+
+    
+    .close {
+        border-radius:6px;
+        background-color:red;
+    }
 
 
   
 </style>
 
+@if (TempData["ReservationMessage"] != null) {
+    <div class="alert alert-warning alert-dismissible d-flex justify-content-between">
 
+        @TempData["ReservationMessage"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
 
  <div class="d-flex flex-wrap" style="padding: 20px;">
+ 
+
     @foreach (var item in Model) {
             <a href="@Url.Action("PacketDetails", "Student", new { id = item.Id })" class="custom-card" style="max-width: 21rem; position: relative;">
                 <div class="card-header">@item.Name</div>
@@ -48,4 +67,7 @@
             </a>
     }
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
 

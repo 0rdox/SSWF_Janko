@@ -11,6 +11,14 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Packet Details</title>
 	<style>
+
+		.packet-container {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 60vh; /* Center vertically on the screen */
+		}
+
 		.card {
 			position: relative; /* Set the position property to relative */
 			border: 2.5px solid black !important;
@@ -23,7 +31,7 @@
 		}
 
 		.card-header {
-/* 			background-color: lightgray; */
+			/* 			background-color: lightgray; */
 		}
 
 		.card-footer {
@@ -42,10 +50,8 @@
 			object-fit: contain;
 			max-width: 100%;
 			max-height: 100%;
-		
 		}
 
-		}
 	</style>
 </head>
 <body>
@@ -54,10 +60,13 @@
 			<div class="packet-info">
 				<div class="packet-name">
 					@Model.Item1.Name (€@Model.Item1.Price)
+
 					@if (Model.Item1.OverEighteen) {
 						<p class="subtext">Dit pakket is 18+</p>
 					}
+
 				</div>
+
 				<div class="other-info-box">
 					Kantine: @Model.Item1.City - @Model.Item1.Canteen<br>
 					Type pakket: @Model.Item1.Type<br>
@@ -73,21 +82,21 @@
 			</a>
 
 
-			@* DEMO PRODUCTS *@
+			@* DEMOPRODUCTS *@
 			<p style="margin-top:10px">Mogelijke producten:</p>
 			<div class="product_images d-flex flex-wrap">
 				@foreach (var item in Model.Item2) {
-			
-						<div class="card border-primary mb-3 mr-3">
-							<div class="card-header demo_product_header ">@item.Name</div>
-							<div class="card-body">
-								<img src="@item.ImageUrl" alt="Packet Image" class="img-fluid card-image" />
-							</div>
-							<div class="card-footer">
-								<p class="card-text"></p>
-							</div>
+
+					<div class="card border-primary mb-3 mr-3">
+						<div class="card-header demo_product_header ">@item.Name</div>
+						<div class="card-body">
+							<img src="@item.ImageUrl" alt="Packet Image" class="img-fluid card-image" />
 						</div>
-					
+						<div class="card-footer">
+							<p class="card-text"></p>
+						</div>
+					</div>
+
 				}
 			</div>
 

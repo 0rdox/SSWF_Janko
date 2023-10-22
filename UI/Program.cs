@@ -19,17 +19,17 @@ builder.Services.AddControllersWithViews();
 
 //--------------------------------SESSION-------------------------------\\
 builder.Services.AddDistributedMemoryCache()
-	.AddSession(options => {
-		options.IdleTimeout = TimeSpan.FromMinutes(10);
-	});
+    .AddSession(options => {
+        options.IdleTimeout = TimeSpan.FromMinutes(10);
+    });
 //--------------------------DEPENDENCY INJECTION--------------------------\\
 builder.Services
-	.AddScoped<ICanteenRepository, CanteenRepository>()
-	.AddScoped<IPacketRepository, PacketRepository>()
-	.AddScoped<IProductRepository, ProductRepository>()
-	.AddScoped<IEmployeeRepository, EmployeeRepository>()
-	.AddScoped<IStudentRepository, StudentRepository>()
-	.AddScoped<IDemoProductRepository, DemoProductRepository>();
+    .AddScoped<ICanteenRepository, CanteenRepository>()
+    .AddScoped<IPacketRepository, PacketRepository>()
+    .AddScoped<IProductRepository, ProductRepository>()
+    .AddScoped<IEmployeeRepository, EmployeeRepository>()
+    .AddScoped<IStudentRepository, StudentRepository>()
+    .AddScoped<IDemoProductRepository, DemoProductRepository>();
 
 
 builder.Services.AddScoped<RoleAssigner>();
@@ -40,46 +40,46 @@ builder.Services.AddScoped<SeedData>();
 
 //--------------------------DATABASE PARTS--------------------------\\
 //change database connection strings to azure
-var connectionStringApp = builder.Configuration.GetConnectionString("AzureAppDBString");
-var connectionStringIdentity = builder.Configuration.GetConnectionString("AzureIdentityDBString");
+var connectionStringApp = builder.Configuration.GetConnectionString("AppDBString");
+var connectionStringIdentity = builder.Configuration.GetConnectionString("IdentityDBString");
 
 //DatabaseApp
 builder.Services.AddDbContext<AppDBContext>(options => {
-	options.UseSqlServer(connectionStringApp);
+    options.UseSqlServer(connectionStringApp);
 });
 //DatabaseIdentity
 builder.Services.AddDbContext<AppIdentityDBContext>(options => {
-	options.UseSqlServer(connectionStringIdentity);
+    options.UseSqlServer(connectionStringIdentity);
 });
 
 //IDENTITY
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(conf => {
-	conf.Password.RequiredLength = 4;
-	conf.Password.RequireDigit = false;
-	conf.Password.RequireNonAlphanumeric = false;
-	// conf.SignIn.RequireConfirmedEmail = true;
+    conf.Password.RequiredLength = 4;
+    conf.Password.RequireDigit = false;
+    conf.Password.RequireNonAlphanumeric = false;
+    // conf.SignIn.RequireConfirmedEmail = true;
 })
-	.AddEntityFrameworkStores<AppIdentityDBContext>()
-	.AddDefaultTokenProviders();
+    .AddEntityFrameworkStores<AppIdentityDBContext>()
+    .AddDefaultTokenProviders();
 
 
 builder.Services.AddAuthentication("CookieAuth")
-	.AddCookie(conf => {
-		conf.Cookie.Name = "IdentityCookie";
-		//  conf.AccessDeniedPath = "/home/AccessDenied";
-		conf.LoginPath = "/Account/Login";
-	});
+    .AddCookie(conf => {
+        conf.Cookie.Name = "IdentityCookie";
+        //  conf.AccessDeniedPath = "/home/AccessDenied";
+        conf.LoginPath = "/Account/Login";
+    });
 
 
 builder.Services.AddAuthorization(policyBuilder => {
-	policyBuilder.AddPolicy("Student", policy => {
-		policy.RequireAuthenticatedUser()
-			  .RequireRole("Student");
-	});
-	policyBuilder.AddPolicy("Employee", policy => {
-		policy.RequireAuthenticatedUser()
-			  .RequireRole("Employee");
-	});
+    policyBuilder.AddPolicy("Student", policy => {
+        policy.RequireAuthenticatedUser()
+              .RequireRole("Student");
+    });
+    policyBuilder.AddPolicy("Employee", policy => {
+        policy.RequireAuthenticatedUser()
+              .RequireRole("Employee");
+    });
 });
 
 //builder.Services.AddControllers().AddJsonOptions(options => {
@@ -117,8 +117,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
-	name: "default",
-	pattern: "{controller=Account}/{action=Login}/{id?}");
+    name: "default",
+    pattern: "{controller=Account}/{action=Login}/{id?}");
 
 ////catch 404
 //app.MapControllerRoute(
@@ -141,7 +141,7 @@ var dataSeeder = scope.ServiceProvider.GetService<SeedData>();
 await roleAssigner.AssignRolesToStudentsAndEmployees();
 //Seed database
 dataSeeder?.SeedDatabase();
-//	dataSeeder?.AddAdditionalPackets();
+//dataSeeder?.AddAdditionalPackets();
 
 
 

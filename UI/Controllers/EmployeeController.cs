@@ -34,51 +34,34 @@ namespace UI.Controllers {
         //PACKET DETAILS
         [Authorize(Policy = "Employee")]
         public IActionResult PacketDetails(int id) {
-            //_packetRepository getPacketDetails();
-            
             var packet = _packetRepository.GetPacketById(id);
             var demoList = _demoProductRepository.GetDemoProducts(packet.Type);
 
 
-            var canteen = GetCanteen();
+          
 
-
-            bool canEdit = packet.CanteenNavigation == canteen; // Adjust this condition as needed
+            Canteen canteen = GetCanteen();
+            bool canEdit = packet.CanteenNavigation == canteen;
             ViewData["CanEdit"] = canEdit;
 
-            if (packet == null) {
-                return View("Packets");
-            }
+
             return View((packet, demoList));
         }
 
 
         [Authorize(Policy = "Employee")]
         public IActionResult CreatePacket() {
-            var canteen = GetCanteen();
-
-
-            if (canteen.OffersHotMeals == true) {
-                ViewData["WarmMeals"] = true;
-            }
-            else {
-                ViewData["WarmMeals"] = false;
-            }
+            CanMakeWarmMeals();
             return View();
         }
 
         [Authorize(Policy = "Employee")]
         [HttpPost]
         public async Task<IActionResult> CreatePacket(string name, string price, DateTime pickupTime, string products, TypeEnum type, string imageUrl) {
-
             if (!ModelState.IsValid) {
                 CanMakeWarmMeals();
-          
-
-
                 return View();
             }
-
 
             await _packetRepository.CreatePacket(name, price, pickupTime, products, type, imageUrl, GetCanteen());
             return RedirectToAction("Packets");
@@ -87,12 +70,7 @@ namespace UI.Controllers {
 
         [HttpGet]
         public IActionResult EditPacket(int id) {
-            // Fetch the packet by id and pass it to the edit view
             var packet = _packetRepository.GetPacketById(id);
-            if (packet == null) {
-                return NotFound(); // Handle not found packet
-            }
-
             CanMakeWarmMeals();
 
             return View(packet);
@@ -100,18 +78,9 @@ namespace UI.Controllers {
 
         [HttpPost]
         public async Task<IActionResult> EditPacket(int id, string name, string price, DateTime pickupTime, string products, TypeEnum type, string imageUrl) {
-            // Validate and update the packet in the database
-            var test = products;
-           
-            //List<Product> productObjects = new List<Product>();
-           // Packet packet = new Packet(name, pickupTime, productObjects, price, type, imageUrl);
             await _packetRepository.UpdatePacket(id,  name,  price,  pickupTime,  products,  type,  imageUrl);
          
             return RedirectToAction("Packets");
-
-
-
-         
         }
 
 

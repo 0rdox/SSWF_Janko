@@ -11,6 +11,7 @@ namespace Domain.Services {
 
         IEnumerable<Packet> GetPackets();
 
+        IEnumerable<Packet> GetReservedPackets(int studentId);
         IEnumerable<Packet> GetMyCanteenPackets(Canteen canteen);
         IEnumerable<Packet> GetOtherCanteenPackets(Canteen canteen);
 
@@ -22,9 +23,10 @@ namespace Domain.Services {
         Task DeletePacket(Packet packet);
         Task UpdatePacket(int packetId, string name, string price, DateTime pickupTime, string products, TypeEnum type, string imageUrl);
 
-
+   
         Packet? GetPacketById(int id);
 
         Task ReservePacket(int packetId, int studentId);
+        Task<bool> ReservePacketBool(int packetId, int studentId);
     }
 }

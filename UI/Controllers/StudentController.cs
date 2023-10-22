@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Infrastructure.Repositories;
 using Domain.Services;
 using Microsoft.AspNetCore.Authorization;
+using System.Net.Sockets;
 
 namespace UI.Controllers {
     public class StudentController : Controller {
@@ -26,9 +27,9 @@ namespace UI.Controllers {
         public IActionResult Packets() {
 
             //move to repo
-            var packets = _packetRepository.GetPackets()
-                .Where(a => a.ReservedById == null)
-                 .OrderBy(c => c.DateTime);
+            var packets = _packetRepository.GetPackets();
+            //.Where(a => a.ReservedById == null)
+            // .OrderBy(c => c.DateTime);
 
             return View(packets);
         }
@@ -40,23 +41,9 @@ namespace UI.Controllers {
         public IActionResult PacketDetails(int id) {
             var packet = _packetRepository.GetPacketById(id);
             var demoList = _demoProductRepository.GetDemoProducts(packet.Type);
+            IsStudentOverEighteen(id);
 
 
-
-
-            var student = _studentRepository.GetStudentById(GetStudentID());
-            int studentAge = CalculateAge(student.DateOfBirth, DateTime.Now);
-
-            if (packet.OverEighteen && studentAge < 18) {
-                ViewData["OverEighteen"] = false;
-            }
-            else {
-                ViewData["OverEighteen"] = true;
-            }
-
-            if (packet == null) {
-                return View("Packets");
-            }
             return View((packet, demoList));
         }
 
@@ -65,26 +52,27 @@ namespace UI.Controllers {
         //MAKE RESERVATION
         [Authorize(Policy = "Student")]
         public async Task<IActionResult> Reserve(int packetId) {
-            await _packetRepository.ReservePacket(packetId, GetStudentID());
+            bool reservationResult = await _packetRepository.ReservePacketBool(packetId, GetStudentID());
 
 
-            return RedirectToAction("Reservations");
+            if (reservationResult) {
+                // Redirect to "Reservations" if reservation was successful
+                return RedirectToAction("Reservations");
+            }
+            else {
+                // Set a message in TempData for the view
+                TempData["ReservationMessage"] = "U heeft al een pakket op die dag gereserveerd";
+
+                // Redirect back to the original page or another suitable page
+                return RedirectToAction("Packets");
+            }
 
         }
 
         //ALL RESERVATIONS
         [Authorize(Policy = "Student")]
         public IActionResult Reservations() {
-            var studentId = GetStudentID();
-
-
-
-            //move to repo
-            var packets = _packetRepository.GetPackets()
-                .Where(a => a.ReservedById == studentId)
-                .OrderBy(c => c.DateTime);
-
-            return View(packets);
+            return View(_packetRepository.GetReservedPackets(GetStudentID()));
         }
 
 
@@ -100,7 +88,6 @@ namespace UI.Controllers {
             return _studentRepository.GetStudents().FirstOrDefault(a => a.Email == email).Id;
         }
 
-        //TODO make GetStudentID Await?
 
         public int CalculateAge(DateTime birthDate, DateTime currentDate) {
             int age = currentDate.Year - birthDate.Year;
@@ -110,6 +97,20 @@ namespace UI.Controllers {
             }
 
             return age;
+        }
+
+
+        public void IsStudentOverEighteen(int packetId) {
+            var packet = _packetRepository.GetPacketById(packetId);
+            var student = _studentRepository.GetStudentById(GetStudentID());
+            int studentAge = CalculateAge(student.DateOfBirth, DateTime.Now);
+
+            if (packet.OverEighteen && studentAge < 18) {
+                ViewData["OverEighteen"] = false;
+            }
+            else {
+                ViewData["OverEighteen"] = true;
+            }
         }
     }
 }

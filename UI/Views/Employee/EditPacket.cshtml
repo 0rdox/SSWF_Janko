@@ -13,12 +13,17 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 	<style>
 		.container {
-			border: solid 3px;
 			padding: 10px;
 			margin-top: 10px;
 			margin-bottom: 60px;
+			border-radius: 15px;
+			border: 4px solid #48a37c;
+			background-color: #a8dcc4;
 		}
 
+		.title {
+			font-weight: 600;
+		}
 		/* Style product items to be displayed inline */
 		.product-item {
 			display: inline-block;
@@ -41,13 +46,21 @@
 			margin-left: 10px;
 		}
 
+		.modal-header {
+			background-color: #62d2a2 !important;
+		}
+
+		.modal-content {
+			border: 2px solid #48a37c !important;
+		}
+
 	</style>
 </head>
 
 <body>
 	<div class="container">
 
-		<h1>Edit Packet</h1>
+		<h1 class="title">Edit Packet</h1>
 
 		<form id="myform" method="post" action="/Employee/EditPacket">
 			<div asp-validation-summary="All" class="text-danger"></div>
@@ -62,29 +75,33 @@
 					</div>
 					<div class="col-md-3">
 						<label asp-for="Price">Prijs:</label>
-						<input asp-for="Price" type="number" class="form-control" id="Price" name="price">
+						<input asp-for="Price" type="text" step="0.01" min="0.01" class="form-control" id="Price" name="price">
 						<span asp-validation-for="Price" class="text-danger"></span>
 					</div>
 				</div>
 			</div>
 
 			<div class="form-group">
-				<label asp-for="Type">Type pakket:</label>
-				<select asp-for="Type" class="form-control" id="Type" name="Type">
-					<option value="TypeEnum.Broodpakket">Broodpakket</option>
-					<option value="TypeEnum.Drankpakket">Drankpakket</option>
-					@if ((bool)ViewData["WarmMeals"]) {
-						<option value="WarmeMaaltijd">Warme Maaltijd</option>
-					}
-				</select>
-				@*     <span asp-validation-for="Type" class="text-danger"></span> *@
-			</div>
+				<div class="row">
+					<div class="col-md-6">
+						<label asp-for="Type">Type pakket:</label>
+						<select asp-for="Type" class="form-control" id="Type" name="Type">
+							<option value="Unknown">Kies een waarde:</option>
+							<option value="Broodpakket">Broodpakket</option>
+							<option value="Drankpakket">Drankpakket</option>
+							@if ((bool)ViewData["WarmMeals"]) {
+								<option value="WarmeMaaltijd">Warme Maaltijd</option>
+							}
+						</select>
+						@*     <span asp-validation-for="Type" class="text-danger"></span> *@
+					</div>
 
-			<div class="form-group">
-				<label asp-for="DateTime">Ophaaltijd:</label>
-				<input asp-for="DateTime" type="datetime-local" class="form-control" id="DateTime" name="pickupTime">
-				<span asp-validation-for="DateTime" class="text-danger"></span>
-			</div>
+					<div class="col-md-6">
+						<label asp-for="DateTime">Ophaaltijd:</label>
+						<input asp-for="DateTime" type="datetime-local" class="form-control" id="DateTime" name="pickupTime" id="pickupTime">
+						<span asp-validation-for="DateTime" class="text-danger"></span>
+					</div>
+				</div>
 
 			<div class="form-group">
 				<label asp-for="ImageUrl">Afbeelding URL:</label>
@@ -92,15 +109,15 @@
 				<span asp-validation-for="ImageUrl" class="text-danger"></span>
 			</div>
 
-			<button type="button" class="btn btn-success" id="addProduct">Add Product</button>
+			<button type="button" class="btn btn-success" id="addProduct">Product Toevoegen</button>
 
 			<!-- List of products -->
 			<div class="form-group" id="productslist">
 				@if (Model.Products != null) {
 					@foreach (var product in Model.Products) {
 						<div class="product-item">
-							<div class="ProductLabel">Product Name: @product.Name</div>
-							<div class="ProductLabel">Alcohol: @(product.Alcohol ? "Yes" : "No")</div>
+							<div class="ProductLabel">@product.Name</div>
+							<div class="ProductLabel">@(product.Alcohol ? "Bevat alcohol" : "")</div>
 							<img src="@product.ImageUrl" alt="Product Image">
 							<div>
 								<a class="btn btn-danger btn-sm delete-product" @* data-product-id="@product.Id" *@>Verwijderen</a>
@@ -127,14 +144,11 @@
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="productModalLabel">Add Product</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
+					<h5 class="modal-title" id="productModalLabel">Product Toevoegen</h5>
 				</div>
 				<div class="modal-body">
 					<div class="form-group">
-						<label for="ProductName">Product Name:</label>
+						<label for="ProductName"></label>
 						<input type="text" class="form-control" id="ProductName" name="ProductName">
 
 					</div>
@@ -148,8 +162,8 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" id="closeProduct">Close</button>
-					<button type="button" class="btn btn-primary" id="saveProduct">Save Product</button>
+					<button type="button" class="btn btn-danger" id="closeProduct">Annuleren</button>
+					<button type="button" class="btn btn-primary" id="saveProduct">Product Toevoegen</button>
 				</div>
 			</div>
 		</div>
@@ -167,25 +181,7 @@
 
 
 
-		
-		// delete existing prods
-		// $(document).ready(function () {
-		//     Attach a click event handler to the "Verwijderen" buttons
-		//     $(".delete-product").click(function () {
-
-		//         console.log("BUTTON CLICK", "Clicked weird button");
-		//         Get the product ID from the data attribute
-		//         var productId = $(this).data("product-id");
-
-		//         Find the product element with the matching product ID and remove it
-		//         $("#productslist").find('.product-item').each(function () {
-		//             if ($(this).data("product-id") === productId) {
-		//                 $(this).remove();
-		//             }
-		//         });
-		//     });
-		// });
-
+	
 
 
 

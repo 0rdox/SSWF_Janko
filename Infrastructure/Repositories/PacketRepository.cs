@@ -23,14 +23,13 @@ namespace Infrastructure.Repositories {
 
 
 
-        public IEnumerable<Packet> GetPackets() => _context.Packets;
+        public IEnumerable<Packet> GetPackets() => _context.Packets.Where(a => a.ReservedById == null).OrderBy(c => c.DateTime);
 
 
-        public Packet? GetPacketById(int id) {
-            return _context.Packets
-     .Include(p => p.Products) // Eager loading of Products
-     .FirstOrDefault(a => a.Id == id);
-        }
+        public Packet? GetPacketById(int id) => _context.Packets.Include(p => p.Products).FirstOrDefault(a => a.Id == id);
+
+
+
 
         public async Task ReservePacket(int packetId, int studentId) {
             var packet = await _context.Packets.FirstOrDefaultAsync(a => a.Id == packetId);
@@ -38,14 +37,14 @@ namespace Infrastructure.Repositories {
 
             if (packet != null && student != null) {
 
-                //Check if student already has reservation on pickup day
+                //Check if packet for that day is already reserved
                 var existingReservation = await _context.Packets
                     .FirstOrDefaultAsync(p =>
                         p.ReservedById == studentId &&
                         p.DateTime.Date == packet.DateTime.Date);
 
                 if (existingReservation != null) {
-                    //handle exception
+                    //dont savechanges
                 }
                 else {
                     packet.ReservedBy = student;
@@ -59,48 +58,7 @@ namespace Infrastructure.Repositories {
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdatePacket(int packetId, string? newName = null, decimal? newPrice = null, DateTime? newPickupTime = null, List<Product>? newProducts = null, TypeEnum? newType = null, string? newImageUrl = null) {
-            //var packet = await _context.Packets
-            //    .Include(p => p.Products)
-            //    .FirstOrDefaultAsync(p => p.Id == packetId);
-
-            var packet = GetPacketById(packetId);
-
-            if (packet != null) {
-                if (newName != null) {
-                    packet.Name = newName;
-                }
-
-                if (newPrice != null) {
-                    packet.Price = newPrice.Value;
-                }
-
-                if (newPickupTime != null) {
-                    packet.DateTime = newPickupTime.Value;
-                    packet.MaxDateTime = newPickupTime.Value.AddHours(6);
-                }
-
-                if (newProducts != null) {
-                    packet.Products.Clear();
-                    if (newProducts.Any()) {
-                        packet.Products.AddRange(newProducts);
-                    }
-                }
-
-                if (newType != null) {
-                    packet.Type = newType.Value;
-                }
-
-                if (newImageUrl != null) {
-                    packet.ImageUrl = newImageUrl;
-                }
-
-                _context.Entry(packet).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-            }
-        }
-
-
+      
 
         public IEnumerable<Packet> GetMyCanteenPackets(Canteen canteen) {
             //make _packetRepository.GetMyPackets()
@@ -149,7 +107,7 @@ namespace Infrastructure.Repositories {
 
         }
 
- 
+
         public async Task UpdatePacket(int packetId, string name, string price, DateTime pickupTime, string products, TypeEnum type, string imageUrl) {
 
 
@@ -176,9 +134,41 @@ namespace Infrastructure.Repositories {
             existingPacket.Type = type;
             existingPacket.ImageUrl = imageUrl;
 
-        
+
 
             await _context.SaveChangesAsync();
         }
+
+        public IEnumerable<Packet> GetReservedPackets(int studentId) => _context.Packets.Where(a => a.ReservedById == studentId).OrderBy(c => c.DateTime);
+
+        public async Task<bool> ReservePacketBool(int packetId, int studentId) {
+            var packet = await _context.Packets.FirstOrDefaultAsync(a => a.Id == packetId);
+            var student = await _context.Students.FirstOrDefaultAsync(a => a.Id == studentId);
+
+            if (packet != null && student != null) {
+                // Check if packet for that day is already reserved
+                var existingReservation = await _context.Packets
+                    .FirstOrDefaultAsync(p =>
+                        p.ReservedById == studentId &&
+                        p.DateTime.Date == packet.DateTime.Date);
+
+                if (existingReservation != null) {
+                    return false; // Reservation already exists for the day
+                }
+                else {
+                    packet.ReservedBy = student;
+                    await _context.SaveChangesAsync();
+                    return true; // Reservation successful
+                }
+            }
+            return false; // Invalid student or packet
+        }
     }
+
+
+
+
+
+    
+
 }
