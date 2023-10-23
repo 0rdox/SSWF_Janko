@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UI.Tests", "UI.Tests\UI.Tes
 		{5196E0B8-F114-4023-86EB-67EB298388A0} = {5196E0B8-F114-4023-86EB-67EB298388A0}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestfulWebService", "RestfulWebService\RestfulWebService.csproj", "{BECF857F-8DD6-4F96-9774-A60E4E8BFD2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestfulWebService", "RestfulWebService\RestfulWebService.csproj", "{BECF857F-8DD6-4F96-9774-A60E4E8BFD2C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Tests", "Infrastructure.Tests\Infrastructure.Tests.csproj", "{E723DBF9-0D11-4042-BEA7-4BB1D4486A68}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +63,10 @@ Global
 		{BECF857F-8DD6-4F96-9774-A60E4E8BFD2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BECF857F-8DD6-4F96-9774-A60E4E8BFD2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BECF857F-8DD6-4F96-9774-A60E4E8BFD2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E723DBF9-0D11-4042-BEA7-4BB1D4486A68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E723DBF9-0D11-4042-BEA7-4BB1D4486A68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E723DBF9-0D11-4042-BEA7-4BB1D4486A68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E723DBF9-0D11-4042-BEA7-4BB1D4486A68}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

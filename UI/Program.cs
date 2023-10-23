@@ -35,13 +35,16 @@ builder.Services
 builder.Services.AddScoped<RoleAssigner>();
 builder.Services.AddScoped<SeedData>();
 
-
-
+//ipv rode knop Annuleren ipv rode knop -> rode tekst op witte knop (minder prominent maken)
+//opslaan switchen met product toevoegen
+//wallpaper watermark -- login foto
+//pakketdetails demoproducts - minimum 2 regels
+//iconen ietsje kleiner - -meer ruimte - tekstlabel eronder (outline?)
 
 //--------------------------DATABASE PARTS--------------------------\\
 //change database connection strings to azure
-var connectionStringApp = builder.Configuration.GetConnectionString("AppDBString");
-var connectionStringIdentity = builder.Configuration.GetConnectionString("IdentityDBString");
+var connectionStringApp = builder.Configuration.GetConnectionString("AzureAppDBString");
+var connectionStringIdentity = builder.Configuration.GetConnectionString("AzureIdentityDBString");
 
 //DatabaseApp
 builder.Services.AddDbContext<AppDBContext>(options => {
@@ -134,14 +137,15 @@ app.UseSession();
 
 
 //ASSIGN ROLES + SEED DATABASE
-using var scope = app.Services.CreateScope();
-var roleAssigner = scope.ServiceProvider.GetRequiredService<RoleAssigner>();
-var dataSeeder = scope.ServiceProvider.GetService<SeedData>();
-//Assign roles
-await roleAssigner.AssignRolesToStudentsAndEmployees();
-//Seed database
-dataSeeder?.SeedDatabase();
-//dataSeeder?.AddAdditionalPackets();
+
+//using var scope = app.Services.CreateScope();
+//var roleAssigner = scope.ServiceProvider.GetRequiredService<RoleAssigner>();
+//var dataSeeder = scope.ServiceProvider.GetService<SeedData>();
+////Assign roles
+//await roleAssigner.AssignRolesToStudentsAndEmployees();
+////Seed database
+//dataSeeder?.SeedDatabase();
+////dataSeeder?.AddAdditionalPackets();
 
 
 

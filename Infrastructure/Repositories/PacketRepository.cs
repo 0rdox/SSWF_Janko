@@ -23,7 +23,11 @@ namespace Infrastructure.Repositories {
 
 
 
-        public IEnumerable<Packet> GetPackets() => _context.Packets.Where(a => a.ReservedById == null).OrderBy(c => c.DateTime);
+        // public IEnumerable<Packet> GetPackets() => _context.Packets.Where(a => a.ReservedById == null).OrderBy(c => c.DateTime);
+        public  IEnumerable<Packet> GetPackets() {
+            var packets = _context.Packets.Where(a => a.ReservedById == null).OrderBy(c => c.DateTime);
+            return packets;
+        }
 
 
         public Packet? GetPacketById(int id) => _context.Packets.Include(p => p.Products).FirstOrDefault(a => a.Id == id);
@@ -45,8 +49,7 @@ namespace Infrastructure.Repositories {
 
                 if (existingReservation != null) {
                     //dont savechanges
-                }
-                else {
+                } else {
                     packet.ReservedBy = student;
                     await _context.SaveChangesAsync();
                 }
@@ -58,7 +61,7 @@ namespace Infrastructure.Repositories {
             await _context.SaveChangesAsync();
         }
 
-      
+
 
         public IEnumerable<Packet> GetMyCanteenPackets(Canteen canteen) {
             //make _packetRepository.GetMyPackets()
@@ -96,8 +99,7 @@ namespace Infrastructure.Repositories {
             List<Product> productObjects;
             if (!products.IsNullOrEmpty()) {
                 productObjects = JsonConvert.DeserializeObject<List<Product>>(products);
-            }
-            else {
+            } else {
                 productObjects = new List<Product>();
             }
             Packet packet = new Packet(name, pickupTime, productObjects, canteen, Decimal.Parse(price), type, imageUrl);
@@ -141,6 +143,7 @@ namespace Infrastructure.Repositories {
 
         public IEnumerable<Packet> GetReservedPackets(int studentId) => _context.Packets.Where(a => a.ReservedById == studentId).OrderBy(c => c.DateTime);
 
+
         public async Task<bool> ReservePacketBool(int packetId, int studentId) {
             var packet = await _context.Packets.FirstOrDefaultAsync(a => a.Id == packetId);
             var student = await _context.Students.FirstOrDefaultAsync(a => a.Id == studentId);
@@ -154,8 +157,7 @@ namespace Infrastructure.Repositories {
 
                 if (existingReservation != null) {
                     return false; // Reservation already exists for the day
-                }
-                else {
+                } else {
                     packet.ReservedBy = student;
                     await _context.SaveChangesAsync();
                     return true; // Reservation successful
@@ -169,6 +171,6 @@ namespace Infrastructure.Repositories {
 
 
 
-    
+
 
 }

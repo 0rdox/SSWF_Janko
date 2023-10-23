@@ -41,7 +41,7 @@ namespace Infrastructure {
 			_identityContext.Database.Migrate();
 			_dbContext.Database.Migrate();
 
-			ClearData().Wait();
+			//ClearData().Wait();
 
 			if (!_dbContext.Packets.Any() && !_dbContext.DemoProducts.Any()) {
 				SeedDB().Wait();
