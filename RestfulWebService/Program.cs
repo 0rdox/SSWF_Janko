@@ -1,6 +1,7 @@
 using Domain.Services;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using RestfulWebService.GraphQL;
@@ -34,9 +35,13 @@ builder.Services.AddGraphQLServer()
     .AddQueryType<OrderQuery>()
         .RegisterDbContext<AppDBContext>(DbContextKind.Pooled);
 
+
+
+
 builder.Services.AddSwaggerGen(c => {
-    c.SwaggerDoc("api", new OpenApiInfo { Title = "EcoTaste API", Version = "v1" });
+    c.SwaggerDoc("restful-api", new OpenApiInfo { Title = "EcoTaste Web API", Version = "v1" });
 });
+
 
 
 
@@ -59,13 +64,16 @@ if (app.Environment.IsDevelopment()) {
 
 
 
-
+//RESTful
 app.UseSwagger();
-app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("/swagger/graphql-api/swagger.json", "EcoTaste  API V1");
 
+app.UseSwaggerUI(c => {
+    c.SwaggerEndpoint("/swagger/restful-api/swagger.json", "EcoTaste RESTful API V1");
 });
+
+
+
+
 //old
 //if (app.Environment.IsDevelopment()) {
 //    app.UseSwagger();
