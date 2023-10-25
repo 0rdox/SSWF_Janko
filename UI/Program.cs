@@ -16,6 +16,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 
+//TODO: 1. Check UserStories
+//TODO: 2. TESTS
+//TODO: 3. Postman Collections
+//TODO: 4. check all TODO:
+//TODO: 5. Add/Remove comments
+//TODO: 6. Validation error afhandelen
+//TODO: 7. UML Diagrams
+
 
 //--------------------------------SESSION-------------------------------\\
 builder.Services.AddDistributedMemoryCache()
