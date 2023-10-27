@@ -35,28 +35,28 @@ namespace UI.Controllers {
 		//token generation
 		public async Task<IActionResult> Index() {
 			//var identity = HttpContext.User.Identity;
-			//var employee = _employeeRepository.GetEmployees().SingleOrDefault(a => a.Email == HttpContext.Session.GetString("UserEmail"));
+			var employee = _employeeRepository.GetEmployees().SingleOrDefault(a => a.Email == HttpContext.Session.GetString("UserEmail"));
 
-			//using var httpClient = new HttpClient();
-			
-			//var signInResponse = await httpClient.PostAsJsonAsync<SignInRequest>("ecotaste.azurewebsites.net/api/signin", new SignInRequest {
-			//	Email = employee.Email,
-			//	Password = "Secret123",
-			//});
+			using var httpClient = new HttpClient();
 
-			//// Read the response string as string
+			var signInResponse = await httpClient.PostAsJsonAsync<SignInRequest>("ecotaste.azurewebsites.net/api/signin", new SignInRequest {
+				Email = employee.Email,
+				Password = "Secret123",
+			});
 
-			//var responseRaw = await signInResponse.Content.ReadAsStringAsync();
-			//Console.WriteLine(responseRaw);
-			//// And deserialize the string into the typed object.
-			//var typedResponse = System.Text.Json.JsonSerializer.Deserialize<SignInResponse>(responseRaw);
+			// Read the response string as string
 
-			//if (signInResponse.IsSuccessStatusCode) {
-			//	// Set the bearer token on the request. 
-			//	httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", typedResponse.Token);
+			var responseRaw = await signInResponse.Content.ReadAsStringAsync();
+			Console.WriteLine(responseRaw);
+			// And deserialize the string into the typed object.
+			var typedResponse = System.Text.Json.JsonSerializer.Deserialize<SignInResponse>(responseRaw);
 
-			//	return RedirectToAction("Packets", "Employee");
-			//}
+			if (signInResponse.IsSuccessStatusCode) {
+				// Set the bearer token on the request. 
+				httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", typedResponse.Token);
+
+				return RedirectToAction("Packets", "Employee");
+			}
 
 			return RedirectToAction("Index", "Home");
 
