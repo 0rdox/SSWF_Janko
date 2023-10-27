@@ -19,22 +19,24 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
- 
+
 builder.Services
-    .AddScoped<ICanteenRepository, CanteenRepository>()
-    .AddScoped<IPacketRepository, PacketRepository>()
-    .AddScoped<IProductRepository, ProductRepository>()
-    .AddScoped<IEmployeeRepository, EmployeeRepository>()
-    .AddScoped<IStudentRepository, StudentRepository>()
-    .AddScoped<IDemoProductRepository, DemoProductRepository>();
+	.AddScoped<ICanteenRepository, CanteenRepository>()
+	.AddScoped<IPacketRepository, PacketRepository>()
+	.AddScoped<IProductRepository, ProductRepository>()
+	.AddScoped<IEmployeeRepository, EmployeeRepository>()
+	.AddScoped<IStudentRepository, StudentRepository>()
+	.AddScoped<IDemoProductRepository, DemoProductRepository>();
+
+builder.Services.AddScoped<OrderQuery>();
 
 var connectionStringApp = builder.Configuration.GetConnectionString("AzureAppDBString");
 var connectionStringIdentity = builder.Configuration.GetConnectionString("AzureIdentityDBString");
 
 //DatabaseApp
 builder.Services.AddDbContext<AppDBContext>(options => {
-    options.UseSqlServer(connectionStringApp);
-}, ServiceLifetime.Singleton);
+	options.UseSqlServer(connectionStringApp);
+});/*, ServiceLifetime.Singleton);*/
 
 
 //IDENTITY
@@ -42,13 +44,12 @@ builder.Services.AddDbContext<AppIdentityDBContext>(options => {
 	options.UseSqlServer(connectionStringIdentity);
 });
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => 
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 options.SignIn.RequireConfirmedEmail = false)
 			.AddEntityFrameworkStores<AppIdentityDBContext>().AddDefaultTokenProviders();
 
 // Configure JWT usage.
-builder.Services.AddAuthentication().AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
-{
+builder.Services.AddAuthentication().AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options => {
 	options.TokenValidationParameters.ValidateAudience = false;
 	options.TokenValidationParameters.ValidateIssuer = false;
 	options.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SecretKeyVeryLong"));
@@ -69,14 +70,14 @@ builder.Services.AddAuthorization(policyBuilder => {
 
 
 builder.Services.AddGraphQLServer()
-    .AddQueryType<OrderQuery>()
-        .RegisterDbContext<AppDBContext>(DbContextKind.Pooled);
+	.AddQueryType<OrderQuery>()
+		.RegisterDbContext<AppDBContext>(DbContextKind.Pooled);
 
 
 
 
 builder.Services.AddSwaggerGen(c => {
-    c.SwaggerDoc("restful-api", new OpenApiInfo { Title = "EcoTaste Web API", Version = "v1" });
+	c.SwaggerDoc("restful-api", new OpenApiInfo { Title = "EcoTaste Web API", Version = "v1" });
 });
 
 
@@ -97,7 +98,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 
 if (app.Environment.IsDevelopment()) {
-    app.UseDeveloperExceptionPage();
+	app.UseDeveloperExceptionPage();
 }
 
 
@@ -106,7 +107,7 @@ if (app.Environment.IsDevelopment()) {
 app.UseSwagger();
 
 app.UseSwaggerUI(c => {
-    c.SwaggerEndpoint("/swagger/restful-api/swagger.json", "EcoTaste RESTful API V1");
+	c.SwaggerEndpoint("/swagger/restful-api/swagger.json", "EcoTaste RESTful API V1");
 });
 
 
