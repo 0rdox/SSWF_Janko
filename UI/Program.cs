@@ -85,7 +85,7 @@ builder.Services.AddAuthentication("CookieAuth")
 //POLICIES
 builder.Services.AddAuthorization(policyBuilder => {
     policyBuilder.AddPolicy("Student", policy => {
-        policy.RequireAuthenticatedUser()
+        policy.RequireAuthenticatedUser() 
               .RequireRole("Student");
     });
     policyBuilder.AddPolicy("Employee", policy => {

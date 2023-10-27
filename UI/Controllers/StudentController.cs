@@ -29,7 +29,7 @@ namespace UI.Controllers {
             using var httpClient = new HttpClient();
 
             //TODO: change to azure
-            var signInResponse = await httpClient.PostAsJsonAsync<SignInRequest>("https://ecotaste.azurewebsites.net/api/signin", new SignInRequest {
+            var signInResponse = await httpClient.PostAsJsonAsync<SignInRequest>("https://ecotasteapi.azurewebsites.net/api/signin", new SignInRequest {
                 Email = student.Email,
                 Password = "Secret123",
             });
