@@ -91,6 +91,11 @@ namespace Infrastructure.Repositories {
 				price = price.Replace('.', ',');
 			}
 
+			//weird azure bug
+			if (price.Length == 7 && price.EndsWith(",00")) {
+				price = price.Substring(0, price.Length - 3); 
+				price = price.Insert(price.Length - 2, ","); 
+			}
 
 			//Get products
 			List<Product> productObjects;
@@ -126,7 +131,10 @@ namespace Infrastructure.Repositories {
 				price = price.Replace('.', ',');
 			}
 
-
+			if (price.Length == 7 && price.EndsWith(",00")) {
+				price = price.Substring(0, price.Length - 3);  
+				price = price.Insert(price.Length - 2, ",");  
+			}
 
 			existingPacket.Name = name;
 			existingPacket.Price = Decimal.Parse(price);
