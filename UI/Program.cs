@@ -137,15 +137,15 @@ app.MapControllerRoute(
 app.UseSession();
 
 
-////ASSIGN ROLES + SEED DATABASE
-//using var scope = app.Services.CreateScope();
-//var roleAssigner = scope.ServiceProvider.GetRequiredService<RoleAssigner>();
-//var dataSeeder = scope.ServiceProvider.GetService<SeedData>();
-////Assign roles
-//await roleAssigner.AssignRolesToStudentsAndEmployees();
-////Seed database
-//dataSeeder?.SeedDatabase();
-//dataSeeder?.AddAdditionalPackets();
+//ASSIGN ROLES + SEED DATABASE
+using var scope = app.Services.CreateScope();
+var roleAssigner = scope.ServiceProvider.GetRequiredService<RoleAssigner>();
+var dataSeeder = scope.ServiceProvider.GetService<SeedData>();
+//Assign roles
+await roleAssigner.AssignRolesToStudentsAndEmployees();
+//Seed database
+dataSeeder?.SeedDatabase();
+dataSeeder?.AddAdditionalPackets();
 
 
 
