@@ -25,19 +25,19 @@ namespace Infrastructure.Repositories {
 
 		// public IEnumerable<Packet> GetPackets() => _context.Packets.Where(a => a.ReservedById == null).OrderBy(c => c.DateTime);
 		public IEnumerable<Packet> GetPackets() {
-			var packets = _context.Packets.OrderBy(c => c.PickupTime);
+			var packets = _context.Packets.OrderBy(c => c.DateTime);
 			return packets;
 		}
 
 		public IEnumerable<Packet> GetNotReservedPackets() {
-			var packets = _context.Packets.Where(a => a.ReservedById == null).OrderBy(c => c.PickupTime);
+			var packets = _context.Packets.Where(a => a.ReservedById == null).OrderBy(c => c.DateTime);
 			return packets;
 		}
 
 		public IEnumerable<Packet> GetMyCanteenPackets(Canteen canteen) {
 			var packetsOurs = _context.Packets
 				.Where(b => b.CanteenNavigation == canteen)
-				  .OrderBy(c => c.PickupTime);
+				  .OrderBy(c => c.DateTime);
 
 			return packetsOurs;
 		}
@@ -45,13 +45,13 @@ namespace Infrastructure.Repositories {
 		public IEnumerable<Packet> GetOtherCanteenPackets(Canteen canteen) {
 			var packetsOthers = _context.Packets
 				.Where(b => b.CanteenNavigation != canteen)
-				.OrderBy(c => c.PickupTime);
+				.OrderBy(c => c.DateTime);
 
 			return packetsOthers;
 		}
 
 		public Packet? GetPacketById(int id) => _context.Packets.Include(p => p.Products).FirstOrDefault(a => a.Id == id);
-		public IEnumerable<Packet> GetReservedPackets(int studentId) => _context.Packets.Where(a => a.ReservedById == studentId).OrderBy(c => c.PickupTime);
+		public IEnumerable<Packet> GetReservedPackets(int studentId) => _context.Packets.Where(a => a.ReservedById == studentId).OrderBy(c => c.DateTime);
 
 
 		public async Task<bool> ReservePacketBool(int packetId, int studentId) {
@@ -63,7 +63,7 @@ namespace Infrastructure.Repositories {
 				var existingReservation = await _context.Packets
 					.FirstOrDefaultAsync(p =>
 						p.ReservedById == studentId &&
-						p.PickupTime.Date == packet.PickupTime.Date);
+						p.DateTime.Date == packet.DateTime.Date);
 
 				if (existingReservation != null || student.CalculateAge(student.DateOfBirth) < 18) {
 					return false;
@@ -130,7 +130,7 @@ namespace Infrastructure.Repositories {
 
 			existingPacket.Name = name;
 			existingPacket.Price = Decimal.Parse(price);
-			existingPacket.PickupTime = pickupTime;
+			existingPacket.DateTime = pickupTime;
 			//Products
 			if (products != null) {
 				List<Product> productObjects = JsonConvert.DeserializeObject<List<Product>>(products);

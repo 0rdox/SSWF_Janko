@@ -34,29 +34,29 @@ namespace UI.Controllers {
 
 		//token generation
 		public async Task<IActionResult> Index() {
-			var identity = HttpContext.User.Identity;
-			var employee = _employeeRepository.GetEmployees().SingleOrDefault(a => a.Email == HttpContext.Session.GetString("UserEmail"));
+			//var identity = HttpContext.User.Identity;
+			//var employee = _employeeRepository.GetEmployees().SingleOrDefault(a => a.Email == HttpContext.Session.GetString("UserEmail"));
 
-			using var httpClient = new HttpClient();
+			//using var httpClient = new HttpClient();
 			
-			var signInResponse = await httpClient.PostAsJsonAsync<SignInRequest>("ecotaste.azurewebsites.net/api/signin", new SignInRequest {
-				Email = employee.Email,
-				Password = "Secret123",
-			});
+			//var signInResponse = await httpClient.PostAsJsonAsync<SignInRequest>("ecotaste.azurewebsites.net/api/signin", new SignInRequest {
+			//	Email = employee.Email,
+			//	Password = "Secret123",
+			//});
 
-			// Read the response string as string
+			//// Read the response string as string
 
-			var responseRaw = await signInResponse.Content.ReadAsStringAsync();
-			Console.WriteLine(responseRaw);
-			// And deserialize the string into the typed object.
-			var typedResponse = System.Text.Json.JsonSerializer.Deserialize<SignInResponse>(responseRaw);
+			//var responseRaw = await signInResponse.Content.ReadAsStringAsync();
+			//Console.WriteLine(responseRaw);
+			//// And deserialize the string into the typed object.
+			//var typedResponse = System.Text.Json.JsonSerializer.Deserialize<SignInResponse>(responseRaw);
 
-			if (signInResponse.IsSuccessStatusCode) {
-				// Set the bearer token on the request. 
-				httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", typedResponse.Token);
+			//if (signInResponse.IsSuccessStatusCode) {
+			//	// Set the bearer token on the request. 
+			//	httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", typedResponse.Token);
 
-				return RedirectToAction("Packets", "Employee");
-			}
+			//	return RedirectToAction("Packets", "Employee");
+			//}
 
 			return RedirectToAction("Index", "Home");
 
