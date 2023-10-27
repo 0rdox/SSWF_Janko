@@ -5,6 +5,8 @@ using Infrastructure.Repositories;
 using Domain.Services;
 using Microsoft.AspNetCore.Authorization;
 using System.Net.Sockets;
+using Domain;
+using System.Net.Http.Headers;
 
 namespace UI.Controllers {
     public class StudentController : Controller {
@@ -19,18 +21,41 @@ namespace UI.Controllers {
             _demoProductRepository = demoProductRepository;
         }
 
+        //token generation
+		public async Task<IActionResult> Index() {
+			var identity = HttpContext.User.Identity;
+			var student = _studentRepository.GetStudents().SingleOrDefault(a => a.Email == HttpContext.Session.GetString("UserEmail"));
+
+			using var httpClient = new HttpClient();
+
+            //TODO: change to azure
+			var signInResponse = await httpClient.PostAsJsonAsync<SignInRequest>("ecotaste.azurewebsites.net/api/signin", new SignInRequest {
+				Email = student.Email,
+				Password = "Secret123",
+			});
+
+			// Read the response string as string
+
+			var responseRaw = await signInResponse.Content.ReadAsStringAsync();
+			Console.WriteLine(responseRaw);
+			// And deserialize the string into the typed object.
+			var typedResponse = System.Text.Json.JsonSerializer.Deserialize<SignInResponse>(responseRaw);
+
+			if (signInResponse.IsSuccessStatusCode) {
+				// Set the bearer token on the request. 
+				httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", typedResponse.Token);
+
+				return RedirectToAction("Packets", "Student");
+			}
+			return RedirectToAction("Index", "Home");
+		}
 
 
 
-        //ALL PACKETS
-        [Authorize(Policy = "Student")]
+		//ALL PACKETS
+		[Authorize(Policy = "Student")]
         public IActionResult Packets() {
-
-            //move to repo
-            var packets = _packetRepository.GetPackets();
-            //.Where(a => a.ReservedById == null)
-            // .OrderBy(c => c.DateTime);
-
+            var packets = _packetRepository.GetNotReservedPackets();
             return View(packets);
         }
 
@@ -47,40 +72,39 @@ namespace UI.Controllers {
             return View((packet, demoList));
         }
 
+		//ALL RESERVATIONS
+		[Authorize(Policy = "Student")]
+		public IActionResult Reservations() {
+			return View(_packetRepository.GetReservedPackets(GetStudentID()));
+		}
 
 
-        //MAKE RESERVATION
-        [Authorize(Policy = "Student")]
+		//MAKE RESERVATION
+		[Authorize(Policy = "Student")]
         public async Task<IActionResult> Reserve(int packetId) {
             bool reservationResult = await _packetRepository.ReservePacketBool(packetId, GetStudentID());
 
 
             if (reservationResult) {
-                // Redirect to "Reservations" if reservation was successful
                 return RedirectToAction("Reservations");
             }
             else {
-                // Set a message in TempData for the view
                 TempData["ReservationMessage"] = "U heeft al een pakket op die dag gereserveerd";
-
-                // Redirect back to the original page or another suitable page
                 return RedirectToAction("Packets");
             }
 
         }
 
-        //ALL RESERVATIONS
-        [Authorize(Policy = "Student")]
-        public IActionResult Reservations() {
-            return View(_packetRepository.GetReservedPackets(GetStudentID()));
-        }
 
 
 
 
 
-        //OTHER
+        //OTHER METHODS
         public int GetStudentID() {
+            var loggedIn = HttpContext.User.Identity;
+
+
             var userName = HttpContext.Session.GetString("UserName");
             var email = HttpContext.Session.GetString("UserEmail");
             var id = HttpContext.Session.GetString("Id");
@@ -88,22 +112,15 @@ namespace UI.Controllers {
             return _studentRepository.GetStudents().FirstOrDefault(a => a.Email == email).Id;
         }
 
-
-        public int CalculateAge(DateTime birthDate, DateTime currentDate) {
-            int age = currentDate.Year - birthDate.Year;
-
-            if (currentDate.Month < birthDate.Month || (currentDate.Month == birthDate.Month && currentDate.Day < birthDate.Day)) {
-                age--;
-            }
-
-            return age;
-        }
-
+  
 
         public void IsStudentOverEighteen(int packetId) {
+
+
+
             var packet = _packetRepository.GetPacketById(packetId);
             var student = _studentRepository.GetStudentById(GetStudentID());
-            int studentAge = CalculateAge(student.DateOfBirth, DateTime.Now);
+            int studentAge = student.CalculateAge(student.DateOfBirth);
 
             if (packet.OverEighteen && studentAge < 18) {
                 ViewData["OverEighteen"] = false;
@@ -112,5 +129,7 @@ namespace UI.Controllers {
                 ViewData["OverEighteen"] = true;
             }
         }
+
+        
     }
 }

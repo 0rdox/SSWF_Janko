@@ -20,10 +20,7 @@ namespace Infrastructure.Repositories {
             await _context.SaveChangesAsync();
         }
 
-        //public Product GetProductById(int id) {
-        //    return _context.Products.FirstOrDefault(a => a.Id == id);
-        //}
-
+ 
         public IEnumerable<Product> GetProducts() {
             return _context.Products;
         }

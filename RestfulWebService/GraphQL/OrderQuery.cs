@@ -18,7 +18,7 @@ namespace RestfulWebService.GraphQL {
             return _packetRepository.GetPackets();
         }    
         public Packet GetPacketById(int id) {
-            return _packetRepository.GetPacketById(id);
+            return _packetRepository.GetPacketById(id)!;
         }
 
         public IEnumerable<Product> GetAllProducts() {

@@ -6,23 +6,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<!-- Add this inside the <head> section of your HTML file -->
-@* 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> *@
-
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Packet Details</title>
 	<style>
-		/* Add this to your existing CSS or your external CSS file */
+		
 		.button-container {
-			display: flex; /* Display buttons in a row */
-			flex-direction: row; /* Stack buttons vertically */
-			align-items: center; /* Center the buttons horizontally */
-			justify-content: center; /* Align buttons to the bottom of the container */
-			gap: 10px; /* Add some space between the buttons */
+			display: flex; 
+			flex-direction: row; 
+			align-items: center;
+			justify-content: center; 
+			gap: 10px; 
 			position: relative;
 			/* height: 50%; */
 		}
@@ -31,18 +25,18 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			height: 60vh; /* Center vertically on the screen */
+			height: 60vh;
 		}
 
 		.card {
-			position: relative; /* Set the position property to relative */
+			position: relative; 
 			border: 2.5px solid black !important;
-			overflow: hidden !important; /* Hide any content that overflows */
+			overflow: hidden !important; 
 			margin: 2px;
 			display: flex;
-			height: 20vh; /* Set the maximum height */
-			width: 9vw; /* Set the maximum width */
-			overflow: hidden; /* Hide any content that overflows */
+			height: 20vh; 
+			width: 9vw;
+			overflow: hidden;
 		}
 
 		.card-header {
@@ -57,11 +51,11 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			position: relative; /* Set the position property to relative */
+			position: relative; 
 		}
 
 		.card-image {
-			position: absolute; /* Set the position property to absolute */
+			position: absolute;
 			object-fit: contain;
 			max-width: 100%;
 			max-height: 100%;
@@ -104,8 +98,8 @@
 				<div class="other-info-box">
 					Kantine: @Model.Item1.City - @Model.Item1.Canteen<br>
 					Type pakket: @Model.Item1.Type<br>
-					Ophaaltijd: @Model.Item1.DateTime<br>
-					Maximale ophaaltijd: @Model.Item1.MaxDateTime
+					Ophaaltijd: @Model.Item1.PickupTime<br>
+					Maximale ophaaltijd: @Model.Item1.MaxPickupTime
 				</div>
 			</div>
 
@@ -113,7 +107,7 @@
 
 			@* DEMOPRODUCTS *@
 			<p style="margin-top:10px">Mogelijke producten:</p>
-			<div class="product_images d-flex flex-wrap">
+			<div class="product_images d-flex flex-wrap justify-content-center">
 				@foreach (var item in Model.Item2) {
 
 					<div class="card border-primary mb-3 mr-3">
@@ -129,17 +123,22 @@
 				}
 			</div>
 
-			@* RESERVE BUTTON *@
-			@if ((bool)ViewData["CanEdit"]) {
-				<div class="button-container">
-					<form asp-controller="Employee" asp-action="DeletePacket" method="post">
-						<input type="hidden" name="id" value="@Model.Item1.Id" />
-						@* <button type="submit" class="btn btn-danger delete-product-button">Verwijder pakket</button> *@
-						<button type="button" class="btn btn-danger delete-product-button" onclick="showDeleteConfirmation()">Verwijder pakket</button>
+			@* BUTTONS  *@
+			@if (Model.Item1.ReservedById == null) {
 
-					</form>
-					<a asp-controller="Employee" asp-action="EditPacket" asp-route-id="@Model.Item1.Id" class="btn btn-primary">Pas pakket aan</a>
-				</div>
+				@if ((bool)ViewData["CanEdit"]) {
+					<div class="button-container">
+						<form asp-controller="Employee" asp-action="DeletePacket" method="post">
+							<input type="hidden" name="id" value="@Model.Item1.Id" />
+							@* <button type="submit" class="btn btn-danger delete-product-button">Verwijder pakket</button> *@
+							<button type="button" class="btn btn-danger delete-product-button" onclick="showDeleteConfirmation()">Verwijder pakket</button>
+
+						</form>
+						<a asp-controller="Employee" asp-action="EditPacket" asp-route-id="@Model.Item1.Id" class="btn btn-primary">Pas pakket aan</a>
+					</div>
+				}
+			} else {
+				<p style="text-align:center">Dit pakket is gereserveerd</p>
 			}
 		</div>
 		<div class="">
@@ -175,7 +174,6 @@
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 	<script>
-		// Function to show the confirmation modal
 		function showDeleteConfirmation() {
 			$('#deleteConfirmationModal').modal('show');
 		}

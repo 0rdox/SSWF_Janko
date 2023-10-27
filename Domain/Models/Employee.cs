@@ -2,7 +2,7 @@
 using Domain.Models.Enums;
 
 namespace Domain.Models {
-	public class Employee //: IdentityUser 
+	public class Employee 
 		{
 
 		[Key]
@@ -13,7 +13,7 @@ namespace Domain.Models {
 		public Canteen Canteen { get; set; }
 		public int CanteenId { get; set; }
 
-		// Parameterless constructor for EF Core
+
 		public Employee() {
 		}
 

@@ -24,13 +24,13 @@
 		.title {
 			font-weight: 600;
 		}
-		/* Style product items to be displayed inline */
+
 		.product-item {
 			display: inline-block;
 			margin-right: 20px;
 		}
 
-			/* Limit the size of images within product items to 100px by 100px */
+
 			.product-item img {
 				width: 100px;
 				height: 100px;
@@ -64,7 +64,7 @@
 
 		<form id="myform" method="post" action="/Employee/EditPacket">
 			<div asp-validation-summary="All" class="text-danger"></div>
-			<!-- Add this inside the form group where you want to display the validation message -->
+
 
 			<div class="form-group">
 				<div class="row">
@@ -93,13 +93,13 @@
 								<option value="WarmeMaaltijd">Warme Maaltijd</option>
 							}
 						</select>
-						@*     <span asp-validation-for="Type" class="text-danger"></span> *@
+	
 					</div>
 
 					<div class="col-md-6">
-						<label asp-for="DateTime">Ophaaltijd:</label>
-						<input asp-for="DateTime" type="datetime-local" class="form-control" id="DateTime" name="pickupTime" id="pickupTime">
-						<span asp-validation-for="DateTime" class="text-danger"></span>
+						<label asp-for="PickupTime">Ophaaltijd:</label>
+						<input asp-for="PickupTime" type="datetime-local" class="form-control" id="DateTime" name="pickupTime" id="pickupTime">
+						<span asp-validation-for="PickupTime" class="text-danger"></span>
 					</div>
 				</div>
 
@@ -172,22 +172,10 @@
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 	<script>
-
+		//MOVE TO wwwroot js
 		var productsData = [];
 
-
-
-		
-
-
-
-	
-
-
-
-
-
-		//CLICK ADDPRODUCT TO SHOW ProductModal
+		//Click add product to show product modal
 		$("#addProduct").click(function() {
 		$("#productModal").modal("show");
 			console.log("BUTTON CLICK", "Clicked ADDPRODUCT");
@@ -196,7 +184,7 @@
 
 
 
-
+		//Click close to close product modal
 		$("#closeProduct").click(function() {
 			console.log("BUTTON CLICK", "Clicked CLOSEPRODUCT");
 
@@ -211,13 +199,12 @@
 			window.history.back();
 		});
 
+		//Save product
 		$("#saveProduct").click(function() {
-			// Get product information from the modal form fields
 			var productName = $("#ProductName").val();
 			var productAlcohol = $("#ProductAlcohol").prop("checked");
 			var productImageUrl = $("#ProductImageUrl").val();
 
-			// Create an object to represent the product
 			var product = {
 				Name: productName,
 			Alcohol: productAlcohol,
@@ -225,7 +212,6 @@
 		};
 
 		productsData.push(product);
-
 
 
 
@@ -248,17 +234,16 @@
 
 		console.log("hidden", hidden_input.value);
 		console.log("proddata", productsData);
-		// Clear the existing content in the product list
+
 		productListElement.html('');
 
-		// Loop through the productsData array and create HTML elements for each product
 		for (var i = 0; i < productsData.length; i++) {
 			var product = productsData[i];
 
 
-			// Create a "Delete" button for each product
+
 			var deleteButton = $("<div><button class='btn btn-danger btn-sm delete-product'>Verwijderen</button></div>");
-			deleteButton.data("index", i); // Store the index of the product in the button's data
+			deleteButton.data("index", i); 
 
 			var productItem = $("<div class='product-item'></div>");
 			var productName = $("<div class='ProductLabel'>Product Name: " + product.Name + "</div>");
@@ -267,11 +252,10 @@
 
 
 
-			// Add a click event handler for the delete button
+		
 			deleteButton.click(function() {
 				console.log("BUTTON CLICK", "Clicked DELETEPRODUCT");
 				var index = $(this).data("index");
-				// Remove the product from the array and update the list
 				productsData.splice(index, 1);
 				updateProductList();
 			});
@@ -287,15 +271,7 @@
 	});
 
 
-							// // Click event handler for the submit button
-							// $("#myform").submit(function (e) {
-							//     // Check if there are no products added
-							//     if (productsData.length === 0) {
-							//         e.preventDefault(); // Prevent the form from being submitted
-							//         alert("U moet minimaal 1 product toevoegen");
-							//     }
-							//     // Continue with the form submission if products are added
-							// });
+	
 
 
 

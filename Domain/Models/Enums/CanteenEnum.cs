@@ -8,6 +8,8 @@ namespace Domain.Models.Enums {
 	public enum CanteenEnum {
 		LA,
 		LD,
-		HA
+		HA,
+		HD,
+		XP
 	}
 }

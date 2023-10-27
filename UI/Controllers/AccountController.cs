@@ -1,7 +1,9 @@
 ﻿
 //using Domain.Services.Seed;
+using Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 
 namespace UI.Controllers {
@@ -14,8 +16,6 @@ namespace UI.Controllers {
 		public AccountController(UserManager<IdentityUser> userMgr, SignInManager<IdentityUser> signInMgr) {
 			_userManager = userMgr;
 			_signInManager = signInMgr;
-
-			//	IdentitySeedData.EnsurePopulated(userMgr).Wait();
 		}
 
 
@@ -31,8 +31,6 @@ namespace UI.Controllers {
 				//SEARCH USER
 				var user = await _userManager.FindByEmailAsync(email);
 				if (user != null) {
-
-
 					var result = await _signInManager.PasswordSignInAsync(user, password, false, false);
 
 					if (result.Succeeded) {
@@ -42,29 +40,24 @@ namespace UI.Controllers {
 						//ADD EMAIL + USERNAME TO SESSION
 						HttpContext.Session.SetString("UserName", user.UserName);
 						HttpContext.Session.SetString("UserEmail", user.Email);
+						
 						HttpContext.Session.SetString("Id", user.Id);
 
 						switch (role[0]) {
 							case "Employee":
-								return RedirectToAction("Packets", "Employee");
+								return RedirectToAction("Index", "Employee");
 
 							case "Student":
-								return RedirectToAction("Packets", "Student");
+								return RedirectToAction("Index", "Student");
 
 						};
 
-
-
 						return View();
 					}
-
-
 				}
 			}
-
 			ModelState.AddModelError("", "Invalid name or password");
 			return View();
-
 		}
 
 		public IActionResult Account() {
@@ -81,5 +74,11 @@ namespace UI.Controllers {
             return View();
         }
 
-    }
+
+
+
+		
+
+
+	}
 }

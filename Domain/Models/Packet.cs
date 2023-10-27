@@ -22,8 +22,8 @@ namespace Domain.Models {
         [Display(Name = "Ophaaltijd")]
         [DataType(DataType.DateTime)]
 
-        public DateTime DateTime { get; set; } //ophalen
-        public DateTime MaxDateTime { get; set; } //max tijd ophalen
+        public DateTime PickupTime { get; set; } 
+        public DateTime MaxPickupTime { get; set; } 
         public bool OverEighteen { get; set; }
 
         //Many to many
@@ -63,9 +63,9 @@ namespace Domain.Models {
                 throw new ArgumentException("Invalid pickup time. Pickup time must be within 48 hours from now.");
             }
 
-            DateTime = dateTime;
+            PickupTime = dateTime;
             //Max tijd van ophalen is 6u na originele ophal moment
-            MaxDateTime = dateTime.AddHours(6);
+            MaxPickupTime = dateTime.AddHours(6);
 
 
             //Producten worden gecheckt op of het alcohol bevat, zo ja? packet is 18+
@@ -86,10 +86,10 @@ namespace Domain.Models {
             if (!PickupTimeIsValid(dateTime)) {
                 throw new ArgumentException("Invalid pickup time. Pickup time must be within 48 hours from now.");
             }
-            DateTime = dateTime;
+            PickupTime = dateTime;
             
             //Max tijd van ophalen is 6u na originele ophaal moment
-            MaxDateTime = dateTime.AddHours(6);
+            MaxPickupTime = dateTime.AddHours(6);
 
             //Producten worden gecheckt op of het alcohol bevat, zo ja? packet is 18+
             OverEighteen = IsOverEighteen(products);

@@ -16,18 +16,18 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			height: 60vh; /* Center vertically on the screen */
+			height: 60vh;
 		}
 
 		.card {
-			position: relative; /* Set the position property to relative */
+			position: relative; 
 			border: 2.5px solid black !important;
-			overflow: hidden !important; /* Hide any content that overflows */
+			overflow: hidden !important; 
 			margin: 2px;
 			display: flex;
-			height: 20vh; /* Set the maximum height */
-			width: 9vw; /* Set the maximum width */
-			overflow: hidden; /* Hide any content that overflows */
+			height: 20vh;
+			width: 9vw;
+			overflow: hidden; 
 		}
 
 		.card-header {
@@ -42,11 +42,11 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			position: relative; /* Set the position property to relative */
+			position: relative; 
 		}
 
 		.card-image {
-			position: absolute; /* Set the position property to absolute */
+			position: absolute; 
 			object-fit: contain;
 			max-width: 100%;
 			max-height: 100%;
@@ -70,8 +70,8 @@
 				<div class="other-info-box">
 					Kantine: @Model.Item1.City - @Model.Item1.Canteen<br>
 					Type pakket: @Model.Item1.Type<br>
-					Ophaaltijd: @Model.Item1.DateTime<br>
-					Maximale ophaaltijd: @Model.Item1.MaxDateTime
+					Ophaaltijd: @Model.Item1.PickupTime<br>
+					Maximale ophaaltijd: @Model.Item1.MaxPickupTime
 				</div>
 
 			</div>
@@ -84,7 +84,7 @@
 
 			@* DEMOPRODUCTS *@
 			<p style="margin-top:10px">Mogelijke producten:</p>
-			<div class="product_images d-flex flex-wrap">
+			<div class="product_images d-flex flex-wrap justify-content-center">
 				@foreach (var item in Model.Item2) {
 
 					<div class="card border-primary mb-3 mr-3">

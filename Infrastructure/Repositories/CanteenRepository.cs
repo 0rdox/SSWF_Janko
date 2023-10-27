@@ -18,7 +18,7 @@ namespace Infrastructure.Repositories {
 
 
 		public Canteen GetCanteenById(int id) {
-			return _context.Canteens.FirstOrDefault(a => a.ID == id);
+			return _context.Canteens.FirstOrDefault(a => a.Id == id);
 		}
 
 		public IEnumerable<Canteen> GetCanteens() {

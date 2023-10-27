@@ -12,7 +12,7 @@ namespace Domain.Services {
         IEnumerable<Product> GetProducts();
 
         Task CreateProduct(Product product);
-        //Product GetProductById(int id);
+
 
 
     }

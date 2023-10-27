@@ -2,9 +2,17 @@ using Domain.Services;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using RestfulWebService.GraphQL;
+
+
+
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +37,35 @@ builder.Services.AddDbContext<AppDBContext>(options => {
 }, ServiceLifetime.Singleton);
 
 
+//IDENTITY
+builder.Services.AddDbContext<AppIdentityDBContext>(options => {
+	options.UseSqlServer(connectionStringIdentity);
+});
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => 
+options.SignIn.RequireConfirmedEmail = false)
+			.AddEntityFrameworkStores<AppIdentityDBContext>().AddDefaultTokenProviders();
+
+// Configure JWT usage.
+builder.Services.AddAuthentication().AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+{
+	options.TokenValidationParameters.ValidateAudience = false;
+	options.TokenValidationParameters.ValidateIssuer = false;
+	options.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SecretKeyVeryLong"));
+});
+
+
+//POLICIES
+builder.Services.AddAuthorization(policyBuilder => {
+	policyBuilder.AddPolicy("Student", policy => {
+		policy.RequireAuthenticatedUser()
+			  .RequireRole("Student");
+	});
+	policyBuilder.AddPolicy("Employee", policy => {
+		policy.RequireAuthenticatedUser()
+			  .RequireRole("Employee");
+	});
+});
 
 
 builder.Services.AddGraphQLServer()
@@ -58,6 +95,7 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment()) {
     app.UseDeveloperExceptionPage();
 }
@@ -83,6 +121,7 @@ app.MapGraphQL();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

@@ -24,11 +24,11 @@ namespace Infrastructure.Migrations.AppDB
 
             modelBuilder.Entity("Domain.Models.Canteen", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("City")
                         .HasColumnType("int");
@@ -39,7 +39,7 @@ namespace Infrastructure.Migrations.AppDB
                     b.Property<bool>("OffersHotMeals")
                         .HasColumnType("bit");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("Canteens");
                 });
@@ -100,14 +100,11 @@ namespace Infrastructure.Migrations.AppDB
                     b.Property<int>("City")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DateTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("MaxDateTime")
+                    b.Property<DateTime>("MaxPickupTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
@@ -116,6 +113,9 @@ namespace Infrastructure.Migrations.AppDB
 
                     b.Property<bool>("OverEighteen")
                         .HasColumnType("bit");
+
+                    b.Property<DateTime>("PickupTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(5, 2)");

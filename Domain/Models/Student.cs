@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using Domain.Models.Enums;
 
 namespace Domain.Models {
@@ -19,15 +20,15 @@ namespace Domain.Models {
 		public string Email { get; set; }
 
 
-        [EnumDataType(typeof(CityEnum))]
-        public CityEnum City { get; set; }
+		[EnumDataType(typeof(CityEnum))]
+		public CityEnum City { get; set; }
 
 		public string Phone { get; set; } = null!;
-
+	
 		public List<Packet> Reservations { get; set; }
 
 
-		//TODO CITY 
+
 		public Student(string name, int studentNumber, DateTime dateOfBirth, string email, CityEnum city, string phone) {
 			this.Name = name;
 			this.StudentNumber = studentNumber;
@@ -36,13 +37,12 @@ namespace Domain.Models {
 			this.City = city;
 			this.Phone = phone;
 
-			//Reservations = new List<Packet>();
-
-
-			if (!CheckAge(dateOfBirth)) {
-				throw new ArgumentException("Age Issue");
-			}
-
+			int age = CalculateAge(dateOfBirth);
+			if (age < 16) {
+				throw new ArgumentException("Gebruiker moet minimaal 16 jaar oud zijn");
+			} else if (age < 0) {
+				throw new ArgumentException("Geboortedatum kan niet in de toekomst liggen.");
+			} 
 		}
 
 		public Student() {
@@ -50,21 +50,16 @@ namespace Domain.Models {
 		}
 
 
-		private bool CheckAge(DateTime dob) {
-			DateTime currentDate = DateTime.Now.Date; // Get the current date without time
+		public int CalculateAge(DateTime birthDate) {
+			DateTime currentDate = DateTime.Now;
 
-			// TODO: Nederlands
-			if (dob > currentDate) {
-				throw new ArgumentException("Date of birth cannot be in the future.");
+			int age = currentDate.Year - birthDate.Year;
+
+			if (currentDate.Month < birthDate.Month || (currentDate.Month == birthDate.Month && currentDate.Day < birthDate.Day)) {
+				age--;
 			}
 
-			DateTime minimumAge = currentDate.AddYears(-16);
-			if (dob > minimumAge) {
-				throw new ArgumentException("User needs to be at least 16 years old.");
-			}
-
-			return true;
+			return age;
 		}
-
 	}
 }

@@ -18,23 +18,10 @@ namespace Infrastructure.Repositories {
 		}
 
 		public IEnumerable<Product> GetDemoProducts(TypeEnum type) {
-
-			//	var list = _context.DemoProducts
-			//.Include(demo => demo.Products) // Include the Products navigation property
-			//.Where(a => a.Type == type)
-			//.ToList();
-
-			////	var list = _context.DemoProducts.Where(a => a.Type == type).ToList();
-
-			//	foreach (var i in list) {
-			//		var j = i.Products;
-			//	}
-			//	return list;
-			//}
 			var products = _context.DemoProducts
-		.Include(demo => demo.Products) // Include the Products navigation property
+		.Include(demo => demo.Products)
 		.Where(a => a.Type == type)
-		.SelectMany(demo => demo.Products) // Flatten the list of products
+		.SelectMany(demo => demo.Products)
 		.ToList();
 
 			return products;

@@ -122,9 +122,9 @@ namespace UI.Tests.Controllers {
 
             var packets = new List<Packet> {
 
-            new Packet { Name = "Lekkere Broodjes" , City = CityEnum.Breda, Canteen = CanteenEnum.LA, DateTime = DateTime.Now, Price = 8.99m, Type = TypeEnum.Broodpakket, ReservedById = null, ImageUrl = "https://rosco-catering.nl/wp-content/uploads/2020/06/Rosco-Catering-Bake-off-box-scaled.jpg" },
-            new Packet { Name = "Drankpakket", City = CityEnum.Breda, Canteen = CanteenEnum.LA, DateTime = DateTime.Now, Price = 14.99m, Type = TypeEnum.Drankpakket, ReservedById = null, ImageUrl = "https://www.foodandwine.com/thmb/a3jODP_x_GpJpD71zT3t3BYbtp8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/how-to-ship-wine-FT-BLOG1221-073f4b1897c34f04bff8ea71dadcba2c.jpg" },
-            new Packet { Name = "Warme Maaltijd", City = CityEnum.Tilburg, Canteen = CanteenEnum.HA, DateTime = DateTime.Now, Price = 22.99m, Type = TypeEnum.WarmeMaaltijd, ReservedById = null, ImageUrl = "https://www.foodandwine.com/thmb/a3jODP_x_GpJpD71zT3t3BYbtp8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/how-to-ship-wine-FT-BLOG1221-073f4b1897c34f04bff8ea71dadcba2c.jpg" }
+            new Packet { Name = "Lekkere Broodjes" , City = CityEnum.Breda, Canteen = CanteenEnum.LA, PickupTime = DateTime.Now, Price = 8.99m, Type = TypeEnum.Broodpakket, ReservedById = null, ImageUrl = "https://rosco-catering.nl/wp-content/uploads/2020/06/Rosco-Catering-Bake-off-box-scaled.jpg" },
+            new Packet { Name = "Drankpakket", City = CityEnum.Breda, Canteen = CanteenEnum.LA, PickupTime = DateTime.Now, Price = 14.99m, Type = TypeEnum.Drankpakket, ReservedById = null, ImageUrl = "https://www.foodandwine.com/thmb/a3jODP_x_GpJpD71zT3t3BYbtp8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/how-to-ship-wine-FT-BLOG1221-073f4b1897c34f04bff8ea71dadcba2c.jpg" },
+            new Packet { Name = "Warme Maaltijd", City = CityEnum.Tilburg, Canteen = CanteenEnum.HA, PickupTime = DateTime.Now, Price = 22.99m, Type = TypeEnum.WarmeMaaltijd, ReservedById = null, ImageUrl = "https://www.foodandwine.com/thmb/a3jODP_x_GpJpD71zT3t3BYbtp8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/how-to-ship-wine-FT-BLOG1221-073f4b1897c34f04bff8ea71dadcba2c.jpg" }
 
         };
 
