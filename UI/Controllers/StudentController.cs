@@ -33,7 +33,7 @@ namespace UI.Controllers {
                 Email = student.Email,
                 Password = "Secret123",
             });
-
+             
             // Read the response string as string
 
             var responseRaw = await signInResponse.Content.ReadAsStringAsync();
