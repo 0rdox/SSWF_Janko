@@ -25,7 +25,7 @@ namespace Infrastructure.Repositories {
 
 		// public IEnumerable<Packet> GetPackets() => _context.Packets.Where(a => a.ReservedById == null).OrderBy(c => c.DateTime);
 		public IEnumerable<Packet> GetPackets() {
-			var packets = _context.Packets.OrderBy(c => c.DateTime);
+			var packets = _context.Packets.Include(p => p.Products).OrderBy(c => c.DateTime);
 			return packets;
 		}
 
@@ -108,7 +108,7 @@ namespace Infrastructure.Repositories {
 				await _context.SaveChangesAsync();
 			}
 			catch (Exception ex) {
-				
+
 
 			}
 
