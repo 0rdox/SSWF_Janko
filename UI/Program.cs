@@ -106,6 +106,8 @@ var app = builder.Build();
 //    app.UseHsts();
 //}
 
+app.UseHsts();
+
 app.UseDeveloperExceptionPage();
 app.UseDatabaseErrorPage();
 
