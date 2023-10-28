@@ -89,7 +89,7 @@ namespace UI.Controllers {
                 return RedirectToAction("Reservations");
             }
             else {
-                TempData["ReservationMessage"] = "U heeft al een pakket op die dag gereserveerd";
+                TempData["ReservationMessage"] = "U kunt dit pakket niet reserveren, u kunt maximaal 1 pakket reserveren per datum. Als u denkt dat dit niet klopt, herlaad de pagina";
                 return RedirectToAction("Packets");
             }
 
