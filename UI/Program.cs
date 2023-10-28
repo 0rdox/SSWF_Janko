@@ -147,7 +147,7 @@ var dataSeeder = scope.ServiceProvider.GetService<SeedData>();
 await roleAssigner.AssignRolesToStudentsAndEmployees();
 //Seed database
 dataSeeder?.SeedDatabase();
-dataSeeder?.AddAdditionalPackets();
+
 
 
 
