@@ -59,7 +59,7 @@ namespace Infrastructure.Repositories {
 			var packet = await _context.Packets.FirstOrDefaultAsync(a => a.Id == packetId);
 			var student = await _context.Students.FirstOrDefaultAsync(a => a.Id == studentId);
 
-			if (packet != null && student != null) {
+			if (packet != null && student != null && packet.ReservedBy == null) {
 				// Check if packet for that day is already reserved
 				var existingReservation = await _context.Packets
 					.FirstOrDefaultAsync(p =>
@@ -74,7 +74,7 @@ namespace Infrastructure.Repositories {
 					await _context.SaveChangesAsync();
 					return true;
 				}
-			}
+			} 
 			return false;
 		}
 
