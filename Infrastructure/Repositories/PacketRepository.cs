@@ -86,16 +86,11 @@ namespace Infrastructure.Repositories {
 
 
 		public async Task CreatePacket(string name, string price, DateTime pickupTime, string products, TypeEnum type, string imageUrl, Canteen canteen) {
-			//Change . to ,
-			if (price.Contains('.')) {
-				price = price.Replace('.', ',');
-			}
+			////Change . to ,
+			//if (price.Contains('.')) {
+			//	price = price.Replace('.', ',');
+			//}
 
-			//weird azure bug
-			if (price.Length == 7 && price.EndsWith(",00")) {
-				price = price.Substring(0, price.Length - 3); 
-				price = price.Insert(price.Length - 2, ","); 
-			}
 
 			//Get products
 			List<Product> productObjects;
@@ -126,15 +121,10 @@ namespace Infrastructure.Repositories {
 			//Get packet before edit
 			var existingPacket = _context.Packets.Include(p => p.Products).FirstOrDefault(p => p.Id == packetId);
 
-			//Change . to ,
-			if (price.Contains('.')) {
-				price = price.Replace('.', ',');
-			}
-
-			if (price.Length == 7 && price.EndsWith(",00")) {
-				price = price.Substring(0, price.Length - 3);  
-				price = price.Insert(price.Length - 2, ",");  
-			}
+			////Change . to ,
+			//if (price.Contains('.')) {
+			//	price = price.Replace('.', ',');
+			//}
 
 			existingPacket.Name = name;
 			existingPacket.Price = Decimal.Parse(price);

@@ -17,12 +17,14 @@ builder.Services.AddControllersWithViews();
 
 //TODO: Check all tests on business logic
 
+//Azure price not working --> i think its sending a price from view instead of string which is weird. 
 
 //TODO: 2. TESTS
 //TODO: 3. Postman Collections
 //TODO: 6. Validation error afhandelen
 //TODO: 7. UML Diagrams
-//TODO: 8. Student if 2 rows of meals footer not correctly placed
+
+
 
 //TESTS:
 //Domain.Services
