@@ -7,123 +7,123 @@ using System.Runtime.ConstrainedExecution;
 using System.Security.Cryptography.Xml;
 
 namespace Domain.Models {
-    public class Packet {
+	public class Packet {
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		public int Id { get; set; }
 
-        [Required(ErrorMessage = "Naam is verplicht")]
-        public string Name { get; set; }
-        public CityEnum City { get; set; }
-        public CanteenEnum Canteen { get; set; }
-        public Canteen CanteenNavigation { get; set; }
+		[Required(ErrorMessage = "Naam is verplicht")]
+		public string Name { get; set; }
+		public CityEnum City { get; set; }
+		public CanteenEnum Canteen { get; set; }
+		public Canteen CanteenNavigation { get; set; }
 
-        [Required(ErrorMessage = "Pickup time is required.")]
-        [Display(Name = "Ophaaltijd")]
-        [DataType(DataType.DateTime)]
+		[Required(ErrorMessage = "Pickup time is required.")]
+		[Display(Name = "Ophaaltijd")]
+		[DataType(DataType.DateTime)]
 
-        public DateTime DateTime { get; set; } 
-        public DateTime MaxDateTime { get; set; } 
-        public bool OverEighteen { get; set; }
+		public DateTime DateTime { get; set; }
+		public DateTime MaxDateTime { get; set; }
+		public bool OverEighteen { get; set; }
 
-        //Many to many
-        public List<Product> Products { get; set; }
-        [Column(TypeName = "decimal(5, 2)")]
+		//Many to many
+		public List<Product> Products { get; set; }
+		[Column(TypeName = "decimal(5, 2)")]
 
-        [Required(ErrorMessage = "Prijs is verplicht")]
+		[Required(ErrorMessage = "Prijs is verplicht")]
 
-        public decimal Price { get; set; }
-        public TypeEnum Type { get; set; } //enum
+		public decimal Price { get; set; }
+		public TypeEnum Type { get; set; } //enum
 
-        public int? ReservedById { get; set; }
-        public Student? ReservedBy { get; set; }
-
-
-        public string ImageUrl { get; set; }
-
-        //public List<Product> DemoProducts { get; set; }
-
-        public Packet(string name, decimal price, string imageUrl, TypeEnum type) {
-            this.Name = name;
-            this.Price = price;
-            this.ImageUrl = imageUrl;
-            this.Type = type;
-            ReservedBy = null;
-            //DemoProducts = AddDemoProducts();
-        }
-
-        public Packet() {
-
-        }
-        public Packet(string name, DateTime dateTime, List<Product> products, decimal price, TypeEnum type, string imageUrl) {
-            Name = name;
+		public int? ReservedById { get; set; }
+		public Student? ReservedBy { get; set; }
 
 
-            if (!PickupTimeIsValid(dateTime)) {
-                throw new ArgumentException("Invalid pickup time. Pickup time must be within 48 hours from now.");
-            }
+		public string ImageUrl { get; set; }
 
-            DateTime = dateTime;
-            //Max tijd van ophalen is 6u na originele ophal moment
-            MaxDateTime = dateTime.AddHours(6);
+		//public List<Product> DemoProducts { get; set; }
 
+		public Packet(string name, decimal price, string imageUrl, TypeEnum type) {
+			this.Name = name;
+			this.Price = price;
+			this.ImageUrl = imageUrl;
+			this.Type = type;
+			ReservedBy = null;
+			//DemoProducts = AddDemoProducts();
+		}
 
-            //Producten worden gecheckt op of het alcohol bevat, zo ja? packet is 18+
-            OverEighteen = IsOverEighteen(products);
+		public Packet() {
 
-
-
-            Products = products;
-            Price = price;
-            Type = type;
-            ImageUrl = imageUrl;
-            ReservedBy = null;
-        }
+		}
+		public Packet(string name, DateTime dateTime, List<Product> products, decimal price, TypeEnum type, string imageUrl) {
+			Name = name;
 
 
-        public Packet(string name, DateTime dateTime, List<Product> products, Canteen canteen, decimal price, TypeEnum type, string imageUrl) {
-            Name = name;
-            if (!PickupTimeIsValid(dateTime)) {
-                throw new ArgumentException("Invalid pickup time. Pickup time must be within 48 hours from now.");
-            }
-            DateTime = dateTime;
-            
-            //Max tijd van ophalen is 6u na originele ophaal moment
-            MaxDateTime = dateTime.AddHours(6);
+			if (!PickupTimeIsValid(dateTime)) {
+				throw new ArgumentException("Invalid pickup time. Pickup time must be within 48 hours from now.");
+			}
 
-            //Producten worden gecheckt op of het alcohol bevat, zo ja? packet is 18+
-            OverEighteen = IsOverEighteen(products);
-            CanteenNavigation = canteen;
-            Products = products;
-            Price = price;
-            Type = type;
-            ImageUrl = imageUrl;
-            ReservedBy = null;
-        }
+			DateTime = dateTime;
+			//Max tijd van ophalen is 6u na originele ophal moment
+			MaxDateTime = dateTime.AddHours(6);
 
 
-        public bool IsOverEighteen(List<Product> products) {
-            foreach (var product in products) {
-                if (product.Alcohol) {
-                    return true;
-                }
-            }
-            return false;
-        }
+			//Producten worden gecheckt op of het alcohol bevat, zo ja? packet is 18+
+			OverEighteen = IsOverEighteen(products);
 
 
 
-
-        public bool PickupTimeIsValid(DateTime pickupTime) {
-            var currentDateTime = DateTime.Now;
-            currentDateTime = new DateTime(currentDateTime.Year, currentDateTime.Month, currentDateTime.Day, currentDateTime.Hour, currentDateTime.Minute, 0);
-            
-            var maxAllowedTime = DateTime.Now.AddHours(48);
-            return pickupTime >= currentDateTime && pickupTime <= maxAllowedTime;
-        }
+			Products = products;
+			Price = price;
+			Type = type;
+			ImageUrl = imageUrl;
+			ReservedBy = null;
+		}
 
 
-    }
+		public Packet(string name, DateTime dateTime, List<Product> products, Canteen canteen, decimal price, TypeEnum type, string imageUrl) {
+			Name = name;
+			if (!PickupTimeIsValid(dateTime)) {
+				throw new ArgumentException("Invalid pickup time. Pickup time must be within 48 hours from now.");
+			}
+			DateTime = dateTime;
+
+			//Max tijd van ophalen is 6u na originele ophaal moment
+			MaxDateTime = dateTime.AddHours(6);
+
+			//Producten worden gecheckt op of het alcohol bevat, zo ja? packet is 18+
+			OverEighteen = IsOverEighteen(products);
+			CanteenNavigation = canteen;
+			Products = products;
+			Price = price;
+			Type = type;
+			ImageUrl = imageUrl;
+			ReservedBy = null;
+		}
+
+
+		public bool IsOverEighteen(List<Product> products) {
+			foreach (var product in products) {
+				if (product.Alcohol) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+
+
+
+		public bool PickupTimeIsValid(DateTime pickupTime) {
+			var currentDateTime = DateTime.Now;
+			currentDateTime = new DateTime(currentDateTime.Year, currentDateTime.Month, currentDateTime.Day, currentDateTime.Hour, currentDateTime.Minute, 0);
+
+			var maxAllowedTime = DateTime.Now.AddHours(48);
+			return pickupTime >= currentDateTime && pickupTime <= maxAllowedTime;
+		}
+
+
+	}
 }
 
 

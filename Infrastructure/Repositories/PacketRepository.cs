@@ -8,6 +8,7 @@ using Domain.Models.Enums;
 using Domain.Services;
 using Infrastructure.Data;
 using Infrastructure.Migrations.AppDB;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.IdentityModel.Tokens;
@@ -86,10 +87,10 @@ namespace Infrastructure.Repositories {
 
 
 		public async Task CreatePacket(string name, string price, DateTime pickupTime, string products, TypeEnum type, string imageUrl, Canteen canteen) {
-			////Change . to ,
-			//if (price.Contains('.')) {
-			//	price = price.Replace('.', ',');
-			//}
+			//Fix price localization azure
+			if (price.Contains(',')) {
+				price = price.Replace(',', '.');
+			}
 
 
 			//Get products
@@ -100,6 +101,7 @@ namespace Infrastructure.Repositories {
 			else {
 				productObjects = new List<Product>();
 			}
+
 			//Create packet
 			Packet packet = new Packet(name, pickupTime, productObjects, canteen, Decimal.Parse(price), type, imageUrl);
 
@@ -121,10 +123,10 @@ namespace Infrastructure.Repositories {
 			//Get packet before edit
 			var existingPacket = _context.Packets.Include(p => p.Products).FirstOrDefault(p => p.Id == packetId);
 
-			////Change . to ,
-			//if (price.Contains('.')) {
-			//	price = price.Replace('.', ',');
-			//}
+			//Fix price localization azure
+			if (price.Contains(',')) {
+				price = price.Replace(',', '.');
+			}
 
 			existingPacket.Name = name;
 			existingPacket.Price = Decimal.Parse(price);

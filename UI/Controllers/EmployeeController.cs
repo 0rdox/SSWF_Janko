@@ -105,6 +105,7 @@ namespace UI.Controllers {
 			}
 
 			await _packetRepository.CreatePacket(name, price, pickupTime, products, type, imageUrl, GetCanteen());
+	
 			return RedirectToAction("Packets");
 		}
 
